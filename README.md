@@ -12,3 +12,10 @@ One would have to install NVIDIA Drivers as it is described in [the instructions
 
 ### NVIDIA-Docker runtime
 [The runtime](https://github.com/NVIDIA/nvidia-docker) has to be installed in order to run dockerized images.
+
+## Translation evaluation
+To run the evaluation one has to execute the scorer script:
+
+```
+./scorer/scorer.py data/En-Ko/test_output.txt data/En-Ko/test_input.txt
+```
