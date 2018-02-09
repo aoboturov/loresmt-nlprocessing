@@ -6,15 +6,18 @@
 \usepackage{latexsym}
 \usepackage{natbib}
 \usepackage{layout}
+\usepackage{multirow}
+\usepackage[dvipsnames]{xcolor}  % Coloured text etc.
+\usepackage[colorinlistoftodos,prependcaption,textsize=tiny]{todonotes}
 
-\newcommand{\confname}{MT Summit 2015}
-\newcommand{\website}{\protect\url{http://www.amtaweb.org/}}
+\newcommand{\confname}{AMTA 2018}
+\newcommand{\website}{\protect\url{https://sites.google.com/view/loresmt/}}
 \newcommand{\contactname}{research track co-chair Yaser Al-Onaizan}
-\newcommand{\contactemail}{onaizan@us.ibm.com} 
+\newcommand{\contactemail}{chaohong.liu@adaptcentre.ie} 
 \newcommand{\conffilename}{mtsummit2015}
-\newcommand{\downloadsite}{\protect\url{http://www.amtaweb.org/}}
-\newcommand{\paperlength}{$12$ (twelve)}
-\newcommand{\shortpaperlength}{$6$ (six)}
+\newcommand{\downloadsite}{\protect\url{http://www.conference.amtaweb.org/}}
+\newcommand{\paperlength}{$8$ (eight)}
+\newcommand{\shortpaperlength}{$4$ (four)}
 
 %% do not add any other page- or text-size instruction here
 
@@ -23,134 +26,91 @@
 \begin{document}
 
 % \mtsummitHeader{x}{x}{xxx-xxx}{2015}{45-character paper description goes here}{Author(s) initials and last name go here}
-\title{\bf Formatting Your Paper \\
+\title{\bf (Un)Supervised Machine Translation \\
   for the \confname~Conference}  
-
-\author{\name{\bf First Author} \hfill  \addr{author1@abc.university.country}\\ 
-        \name{\bf Second Author} \hfill \addr{author2@abc.university.country}\\ 
-        \addr{Department of Science, My University, 
-        MyTown, Zip, Country}
+\author{\name{\bf Ilya Gusev} \hfill  \addr{ilya.gusev@phystech.edu}\\ 
+        \addr{MPTI, Dolgoprudny, Moscow Region, 141701, Russian Federation}
 \AND
-       \name{\bf Third Author} \hfill \addr{author3@abc.university.country}\\
-        \addr{Department of Science, My University, 
-        MyTown, Zip, Country}
+        \name{\bf Artem Oboturov} \hfill \addr{oboturov@gmai.com}
 }
 
 \maketitle
 \pagestyle{empty}
 
 \begin{abstract}
-  This document contains the instructions for preparing a camera-ready
-  manuscript for the proceedings of \confname . The document itself
-  conforms to its own specifications, and is therefore an example of
-  what your manuscript should look like. Authors are asked to conform
-  to all the directions reported in this document.
+  A comparision of supervised and unsupervised NMT models was done for the corpora provided by the DeepHack.Babel competition.
+  \todo[inline]{Write an abstract}
 \end{abstract}
-
-\section{Credits}
-
-This text format is derived from that of the Journal of Evolutionary
-Computation.\footnote{Originally written by Darrell Whitley, and only
-  later modified by Marc Schoenauer, especially regarding the
-  bibliography style} The instructions in this document are derived
-from those of the MT Summit 2013, % update this list at next change
-which was the latest in a long line of adaptations: EAMT 2011, 2010
-and 2009, Coling 2008, ACL-07, Coling/ACL-06, EACL-06, ACL-05 and
-EACL-03.  All these were based on the formats of earlier ACL and EACL
-Conference proceedings.  Those versions were written by several
-people, including John Chen, Henry S. Thompson and Donald Walker.
 
 \section{Introduction}
 
-The following formatting instructions are directed to authors of
-papers accepted for publication in \confname{}~proceedings, including
-the main conference, workshops, posters and demos. See also the
-conference website \website~for additional advice and information
-regarding submission.  All authors are required to adhere to these
-specifications. Authors are required to submit their papers in PDF
-(Portable Document Format). Papers are designed to be printed on
-\textbf{US letter paper}. Authors from countries in which access to
-word processing systems is limited should contact the appropriate
-program chair(s) as soon as possible.
+\todo[inline]{Write problem statement}
 
-\section{General Instructions}
+Given the problem at hand one could devise a number of baseline approaches and then compare them to the unsupervised model described above.
+Section~\ref{sec:baselines} outlines the baselines which were used to benchmark the UNMT in the oblivious setup.
+In Section~\ref{sec:unmt} we perform experiments with the UNMT model for the oblivious setup.
+Finally, in Section~\ref{sec:nonoblivious} we are investigating whether prior knowledge of a language pair gives an advantage for the UNMT approach.
 
-Manuscripts must be in single-column format. The {\nobreak{title}}
-must be centered at the top of the first page. Authors' names, email
-addresses and complete mailing addresses must appear below the title,
-as in the current document. {\bf Type single-spaced.}  Start all pages
-directly under the top margin. See the guidelines later regarding
-formatting the first page.
+\section{Baselines}
+\label{sect:baselines}
 
-Unless otherwise specified, the maximum length of a manuscript is
-\paperlength~pages, plus 2 (two) pages for references
-%%% for regular and workshop papers and \shortpaperlength~pages for posters and demos, 
-(see Section~\ref{sec:length} for additional information on the
-maximum number of pages).
+A supervised NMT model was chosen for the baseline.
+It was implemented in OpenNMT~\cite{opennmt} and had the following model architecture:
 
-\subsection{Electronically-available resources}
+\todo[inline]{Model architecture is missing}
 
-This description is provided in \LaTeX2e (\nobreak{\conffilename.tex})
-along with the \LaTeX2e style file used to format it
-(\nobreak{\conffilename.sty}) and bibliography
-(\textsc{Bib}\TeX) example file (\nobreak{\conffilename.bib}); and in
-PDF format (\nobreak{\conffilename.pdf}). These files are all
-available at \downloadsite. There is also a Microsoft Word document
-template (\nobreak{\conffilename.dot}) available at the same URL. We
-strongly re\-commend the use of these style files, which have been
-appropriately tailored for the \confname~proceedings.
+All those models were trained only on a {\tt 50K} parallel corpus with a {\tt 5\%} validation set.
+Training time on a NVIDIA Titan XP GPU was usually measured in tens of minutes.
+The results are provided in the Table~\ref{table:baselines}.
+Another baseline which is reported here is a input to output copy which is reported as the {\tt no-Epochs} baseline.
 
+\begin{table}
+\begin{center}
+\begin{tabular}{ l c l }
+Pair & Epochs & Score \\
+\hline
+\multirow{3}{4em}{En-Ru} & - & 0.02123 \\
+& 1 & 0.10783 \\ 
+& 5 & 0 \todo[inline]{run experiment} \\ 
+& 10 & 0 \todo[inline]{run experiment} \\ 
+\hline
+\multirow{3}{4em}{Lv-En} & - & 0.02075 \\
+& 1 & 0.01142 \\ 
+& 5 & 0.04766 \\ 
+& 10 & 0 \todo[inline]{run experiment} \\ 
+\hline
+\multirow{3}{4em}{En-Ko} & - & 0.02759 \\
+& 1 & 0.11179 \\ 
+& 5 & 0.22945 \\ 
+& 10 & 0 \todo[inline]{run experiment} \\
+\end{tabular}
+\end{center}
+\caption{Supervised NMT baselines, measured in BLEU scores.}
+\label{table:baselines}
+\end{table}
 
-\subsection{Format of Electronic Manuscript}
-\label{sect:pdf}
+One could notice, that on the {\tt Lv-En} langauge pair, model performance was mediocre.
+It could be explained by the fact that {\tt En-Ru} and {\tt En-Ko} were topic-resticted corpora - both were descriptions of hotels only, while the {\tt Lv-En} corpora was extracted from a news feed which had no topics constraints.
 
-For the production of the electronic manuscript you must use Adobe's
-Portable Document Format (PDF). This format can be generated directly
-from \LaTeX source files, using program pdf\LaTeX, or it can be
-generated from postscript files. On Unix systems, you can use {\tt
-  ps2pdf} for this purpose.  Recent versions of Microsoft Windows can
-produce PDF directly (File$>$Save As$>$Save As Type: PDF). Otherwise,
-you can use Adobe's Distiller or GSview (File$>$Convert$>$pdfwrite);
-if you have \textit{cygwin} installed, you can use
-\textit{ps2pdf}. Note that some word processing programs generate PDF
-which may not include all the necessary fonts (esp. tree diagrams,
-symbols). When you print or create the PDF file, there is usually an
-option in your printer setup to include none, all or just non-standard
-fonts.  Please make sure that you select the option of including ALL
-the fonts. {\em Before sending it, test your PDF by printing it from a
-  computer different from the one where it was created.} Moreover,
-some word processors may generate very large postscript / PDF files,
-where each page is rendered as an image. Such images may reproduce
-poorly. In this case, try alternative ways to obtain the postscript
-and / or PDF. One way on some systems is to install a driver for a
-postscript printer, send your document to the printer specifying
-``Output to a file'', then convert the file to PDF.
+\section{Unsupervised Neural Machine Translation}
+\label{sect:unmt}
 
-% US Letter
-It is important to specify the \textbf{US Letter format} (21.6 cm x
-27.9 cm) / (8.5 in x 11 in) when formatting the paper. When working with {\tt
-dvips}, for instance, one should specify {\tt -t letter}.
+\section{Prior Language Pair Information}
+\label{sect:nonoblivious}
 
-% A4
-%It is of utmost importance to specify the \textbf{A4 format} (21.0 cm
-%x 29.7 cm) / (8.3 in x 11.7 in) when formatting the paper. When working with
-%{\tt dvips}, for instance, one should specify {\tt -t a4}.
+\subsection{Attacking the Language Pair}
+\label{sect:attack}
 
-Print-outs of the PDF file on US Letter paper should look like the
-present document, which conforms to the formatting requirements. {\em
-  Note that in order for your paper to print correctly, you should
-  disable centering and scale-to-fit options on your printer.} If you
-cannot meet the above requirements about the production of your
-camera-ready paper, please contact the program chairs as soon as
-possible.
+\subsection{Would Prior Knowledge Matter?}
+\label{sect:prior}
 
+\section{Conclusion}
 
-\subsection{Layout}
-\label{ssec:layout}
-
-Format manuscripts in a single column, in the manner these
-instructions are formatted. The exact dimensions for a page on
-US letter paper are:
+%This text format is derived from that of the Journal of Evolutionary
+%Computation.\footnote{Originally written by Darrell Whitley, and only
+%  later modified by Marc Schoenauer, especially regarding the
+%  bibliography style}
+  
 
 % US letter
 \begin{itemize}
@@ -187,42 +147,6 @@ in the preamble. If Times Roman is unavailable, use {\bf Computer
   Modern Roman} (\LaTeX2e{}'s default).  Note that the latter is about
   10\% less dense than Adobe's Times Roman font.
 
-
-\subsection{The First Page}
-\label{ssec:first}
-
-Draw a horizontal line the full width of the text above the title, and
-another one below the authors' names and affiliations.  Center the
-title across the top of the page. Authors' names appear under the
-title, one per line, with the author name in boldface, flush to the
-left and corresponding email flush to the right.  Affiliations and
-mail addresses appear under each corresponding author name, flush to
-the left. Do not use footnotes for affiliations. Do not include the
-paper ID number assigned during the submission process. Use the
-single-column format throughout the text.
-
-{\bf Title}: Place the title centered at the top of the first page, in
-a 18-point bold font. Long titles should be typed on two lines without
-a blank line intervening. Approximately, put the title at 3.8 cm (1.5
-in) from the top of the page, followed by a blank line, then the
-authors' names in 11-point bold font, and the affiliations in 11-point
-regular font on the following line. Do not use only initials for given
-names (middle initials are allowed). Avoid capitalizing last
-names. The affiliation should contain the author's complete address,
-and if possible an electronic mail address. Leave about 1 cm (0.4 in)
-between the affiliation and the body of the first page.
-
-{\bf Abstract}: Type the abstract at the beginning of the first
-column. The width of the abstract text should be smaller than the
-width of the columns for the text in the body of the paper by about 1
-cm (0.4 in) on each side. The word {\bf Abstract} should be in 9-point
-bold font above the body of the abstract, which should be in 9-point
-font. The abstract should be a concise summary of the general thesis
-and conclusions of the paper. It should be no longer than 200 words.
-
-{\bf Text}: Begin typing the main body of the text immediately after
-the abstract. Use 10 point font for text. {\bf Indent} when starting a
-new paragraph, except for the first paragraph following each heading.
 
 
 \subsection{Sections}
@@ -313,16 +237,6 @@ possible.
 each one sequentially in the form:  ``Figure 1. Caption of the
 Figure.'', ``Table 1. Caption of the Table.''  Type the captions of
 the figures and tables below the body, using 10-point text.
-
-\section{Length of Submission}
-\label{sec:length}
-
-Unless otherwise specified, the maximum length is \paperlength~pages,
-plus 2 (two) pages for references. 
-%%%%% for regular and workshop papers. and \shortpaperlength pages for posters and demos. 
-The page limit should be observed strictly. All illustrations and
-appendices must be accommodated within these page limits, following
-the formatting instructions given in the present document.
 
 \small
 

@@ -1,0 +1,47 @@
+* number of examples: 47429
+* vocabulary size. source = 24201; target = 46527
+
+NMTModel(
+  (encoder): RNNEncoder(
+    (embeddings): Embeddings(
+      (make_embedding): Sequential(
+        (emb_luts): Elementwise(
+          (0): Embedding(24201, 300, padding_idx=1)
+        )
+      )
+    )
+    (rnn): LSTM(300, 400, num_layers=3, dropout=0.3)
+  )
+  (decoder): InputFeedRNNDecoder(
+    (embeddings): Embeddings(
+      (make_embedding): Sequential(
+        (emb_luts): Elementwise(
+          (0): Embedding(46527, 300, padding_idx=1)
+        )
+      )
+    )
+    (dropout): Dropout(p=0.3)
+    (rnn): StackedLSTM(
+      (dropout): Dropout(p=0.3)
+      (layers): ModuleList(
+        (0): LSTMCell(700, 400)
+        (1): LSTMCell(400, 400)
+        (2): LSTMCell(400, 400)
+      )
+    )
+    (attn): GlobalAttention(
+      (linear_in): Linear(in_features=400, out_features=400)
+      (linear_out): Linear(in_features=800, out_features=400)
+      (sm): Softmax()
+      (tanh): Tanh()
+    )
+  )
+  (generator): Sequential(
+    (0): Linear(in_features=400, out_features=46527)
+    (1): LogSoftmax()
+  )
+)
+
+* number of parameters: 48374927
+* encoder:  10949900
+* decoder:  37425027
