@@ -33,7 +33,7 @@
 \author{\name{\bf Ilya Gusev} \hfill  \addr{ilya.gusev@phystech.edu}\\
         \addr{MPTI, Dolgoprudny, Moscow Region, 141701, Russian Federation}
 \AND
-        \name{\bf Artem Oboturov} \hfill \addr{oboturov@gmai.com}
+        \name{\bf Artem Oboturov} \hfill \addr{oboturov@gmail.com}
 }
 
 \maketitle
@@ -57,11 +57,11 @@ Finally, in Section~\ref{sec:nonoblivious} we are investigating whether prior kn
 \label{sect:baselines}
 
 A supervised NMT model was chosen for the baseline.
-The model was implemented in OpenNMT~\cite{opennmt} and had the following Encoder-Decoder architecture:
+The model was implemented in OpenNMT~\citep{opennmt} and had the following Encoder-Decoder architecture:
 \begin{itemize}
 \item encoder is a continuous embedding from the source language to a $300$ dimensional space;
 \item followed by a $3$-layers LSTM with a dropout;
-\item the decoder has a stacked LSTM with a dropout, a global attention \cite{bahdanau2014neural} and a continuous embedding from a $300$ dimensional space,
+\item the decoder has a stacked LSTM with a dropout, a global attention \citep{bahdanau2014neural} and a continuous embedding from a $300$ dimensional space,
 \end{itemize}
 full description is given in an Appendix~\ref{appendix:supervised}.
 
@@ -69,6 +69,7 @@ All those models were trained only on a {\tt 50K} parallel corpus with a {\tt 5\
 Training time on a NVIDIA Titan XP GPU was usually measured in tens of minutes.
 The results are provided in the Table~\ref{table:baselines}.
 Another baseline which is reported here is a input to output copy which is reported as the {\tt no-Epochs} baseline.
+Embeddings were trained with Fasttext~\citep{bojanowski2016enriching}.
 
 \begin{table}
 \begin{center}
@@ -171,41 +172,6 @@ other symbols.\footnote{This is how a footnote should appear.}
 Footnotes should be separated from the main text by a
 line.\footnote{Note the line separating the footnotes from the text.}
 
-\subsection{Copyright}
-
-% \confname{} requires a copyright license statement. This should be inserted as
-% an unnumbered footnote on the first column of the first page. The \LaTeX{} style file
-% (and the Word template) adds copyright statement automatically. Refer to the style file for instructions to
-% change this if required.
-
-\confname{} lets copyright stay with the authors and allows for free verbatim distribution of papers for optimal dissemination. A footer with the text
-\begin{quote}
-\begin{small}
-\begin{it}
-  Proceedings of The Fifteenth MT Summit Conference hosted by the Association for Machine Translation in the Americas, Miami, 30 October - 3 November, 2015.\\
-  Al-Onaizan, Y., DeCamp, J., Dillinger, M., Doyon, J., Foster, G., Lavie, A. , Marciano, J. , Richardson, S., Sawaf, H. , Simard,
-  M. eds.\\
-  \copyright{} 2015 The authors.\\
-  This article is licensed under a Creative Commons 3.0 licence, no
-  derivative works, attribution, CC-BY-ND.
-\end{it}
-\end{small}
-\end{quote}
-will be added to the bottom of all papers when proceedings are
-edited. If, for some reason, this copyright notice is not adequate for
-your paper, please contact the program chairs as soon as possible.
-
-\subsection{Graphics}
-
-{\bf Illustrations}: Place figures, tables, and photo\-graphs in the
-paper near where they are first discussed, rather than at the end, if
-possible.
-
-{\bf Captions}: Provide a caption for every illustration; number
-each one sequentially in the form:  ``Figure 1. Caption of the
-Figure.'', ``Table 1. Caption of the Table.''  Type the captions of
-the figures and tables below the body, using 10-point text.
-
 \small
 
 \bibliographystyle{apalike}
@@ -214,46 +180,7 @@ the figures and tables below the body, using 10-point text.
 \begin{appendices}
 \section{Supervised NMT Model}
 \label{appendix:supervised}
-\begin{lstlisting}
-(encoder): RNNEncoder(
-  (embeddings): Embeddings(
-    (make_embedding): Sequential(
-      (emb_luts): Elementwise(
-        (0): Embedding(N, 300, padding_idx=1)
-      )
-    )
-  )
-  (rnn): LSTM(300, 400, num_layers=3, dropout=0.3)
-)
-(decoder): InputFeedRNNDecoder(
-  (embeddings): Embeddings(
-    (make_embedding): Sequential(
-      (emb_luts): Elementwise(
-        (0): Embedding(M, 300, padding_idx=1)
-      )
-    )
-  )
-  (dropout): Dropout(p=0.3)
-  (rnn): StackedLSTM(
-    (dropout): Dropout(p=0.3)
-    (layers): ModuleList(
-      (0): LSTMCell(700, 400)
-      (1): LSTMCell(400, 400)
-      (2): LSTMCell(400, 400)
-    )
-  )
-  (attn): GlobalAttention(
-    (linear_in): Linear(in_features=400, out_features=400)
-    (linear_out): Linear(in_features=800, out_features=400)
-    (sm): Softmax()
-    (tanh): Tanh()
-  )
-)
-(generator): Sequential(
-  (0): Linear(in_features=400, out_features=M)
-  (1): LogSoftmax()
-)
-\end{lstlisting}
+\lstinputlisting{supervised-model.txt}
 \end{appendices}
 
 \end{document}
