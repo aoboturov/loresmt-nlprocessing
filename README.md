@@ -65,3 +65,17 @@ docker run -it \
 | En-Ko | 0.11179 | `supervised-gpu` - GPU, 3 RNN layers, RNN size 400, 1 epoch   |
 | En-Ko | 0.22945 | `supervised-gpu` - GPU, 3 RNN layers, RNN size 400, 5 epochs  |
 | En-Ko | 0.22945 | `supervised-gpu` - GPU, 3 RNN layers, RNN size 400, 10 epochs |
+
+### UNMT - as described in the [Unsupervised Machine Translation Using Monolingual Corpora Only](https://openreview.net/forum?id=rkYTTf-AZ)
+```
+docker run -it \
+    -v /LoResMT/Lv-En/test_parallel_corpus.txt:/data/parallel_corpus.txt:ro \
+    -v /LoResMT/Lv-En/test_input.txt:/data/input.txt:ro \
+    -v /LoResMT/Lv-En/test_corpus1.txt:/data/corpus1.txt:ro \
+    -v /LoResMT/Lv-En/test_corpus2.txt:/data/corpus2.txt:ro \
+    -v /LoResMT/output:/output:rw \
+    --memory=8g \
+    --runtime=nvidia \
+    kwakinalabs/deephack-finals-v2
+```
+
