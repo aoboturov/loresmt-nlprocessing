@@ -9,11 +9,13 @@
 \usepackage{multirow}
 \usepackage[dvipsnames]{xcolor}  % Coloured text etc.
 \usepackage[colorinlistoftodos,prependcaption,textsize=tiny]{todonotes}
+\usepackage{listings}
+\usepackage{color}
 
 \newcommand{\confname}{AMTA 2018}
 \newcommand{\website}{\protect\url{https://sites.google.com/view/loresmt/}}
 \newcommand{\contactname}{research track co-chair Yaser Al-Onaizan}
-\newcommand{\contactemail}{chaohong.liu@adaptcentre.ie} 
+\newcommand{\contactemail}{chaohong.liu@adaptcentre.ie}
 \newcommand{\conffilename}{mtsummit2015}
 \newcommand{\downloadsite}{\protect\url{http://www.conference.amtaweb.org/}}
 \newcommand{\paperlength}{$8$ (eight)}
@@ -27,8 +29,8 @@
 
 % \mtsummitHeader{x}{x}{xxx-xxx}{2015}{45-character paper description goes here}{Author(s) initials and last name go here}
 \title{\bf (Un)Supervised Machine Translation \\
-  for the \confname~Conference}  
-\author{\name{\bf Ilya Gusev} \hfill  \addr{ilya.gusev@phystech.edu}\\ 
+  for the \confname~Conference}
+\author{\name{\bf Ilya Gusev} \hfill  \addr{ilya.gusev@phystech.edu}\\
         \addr{MPTI, Dolgoprudny, Moscow Region, 141701, Russian Federation}
 \AND
         \name{\bf Artem Oboturov} \hfill \addr{oboturov@gmai.com}
@@ -55,9 +57,13 @@ Finally, in Section~\ref{sec:nonoblivious} we are investigating whether prior kn
 \label{sect:baselines}
 
 A supervised NMT model was chosen for the baseline.
-It was implemented in OpenNMT~\cite{opennmt} and had the following model architecture:
-
-\todo[inline]{Model architecture is missing}
+The model was implemented in OpenNMT~\cite{opennmt} and had the following Encoder-Decoder architecture:
+\begin{itemize}
+\item encoder is a continuous embedding from the source language to a $300$ dimensional space;
+\item followed by a $3$-layers LSTM with a dropout;
+\item the decoder has a stacked LSTM with a dropout, a global attention \cite{bahdanau2014neural} and a continuous embedding from a $300$ dimensional space,
+\end{itemize}
+full description is given in an Appendix~\ref{appendix:supervised}.
 
 All those models were trained only on a {\tt 50K} parallel corpus with a {\tt 5\%} validation set.
 Training time on a NVIDIA Titan XP GPU was usually measured in tens of minutes.
@@ -70,19 +76,19 @@ Another baseline which is reported here is a input to output copy which is repor
 Pair & Epochs & Score \\
 \hline
 \multirow{3}{4em}{En-Ru} & - & 0.02123 \\
-& 1 & 0.10783 \\ 
-& 5 & 0 \todo[inline]{run experiment} \\ 
-& 10 & 0 \todo[inline]{run experiment} \\ 
+& 1 & 0.10783 \\
+& 5 & 0.25747 \\
+& 10 & 0.28915 \\
 \hline
 \multirow{3}{4em}{Lv-En} & - & 0.02075 \\
-& 1 & 0.01142 \\ 
-& 5 & 0.04766 \\ 
-& 10 & 0 \todo[inline]{run experiment} \\ 
+& 1 & 0.01142 \\
+& 5 & 0.04766 \\
+& 10 & 0.05756 \\
 \hline
 \multirow{3}{4em}{En-Ko} & - & 0.02759 \\
-& 1 & 0.11179 \\ 
-& 5 & 0.22945 \\ 
-& 10 & 0 \todo[inline]{run experiment} \\
+& 1 & 0.11179 \\
+& 5 & 0.22945 \\
+& 10 & 0.25418 \\
 \end{tabular}
 \end{center}
 \caption{Supervised NMT baselines, measured in BLEU scores.}
@@ -110,44 +116,6 @@ It could be explained by the fact that {\tt En-Ru} and {\tt En-Ko} were topic-re
 %Computation.\footnote{Originally written by Darrell Whitley, and only
 %  later modified by Marc Schoenauer, especially regarding the
 %  bibliography style}
-  
-
-% US letter
-\begin{itemize}
-\item Left margin: 4.45 cm (1.75 in)
-\item Right margin: 3.8 cm (1.5 in)
-\item Top margin: 3.8 cm (1.5 in)
-\item Bottom margin: 3.2 cm (1.25 in)
-\item Text width: 13.3 cm (5.25 in)
-\item Text height: 21.0 cm (8.25 in)
-\end{itemize}
-
-Pages should not be numbered. In LaTeX, this can be achieved by
-inserting  
-\begin{quote}
-\begin{verbatim}
-\pagestyle{empty}
-\end{verbatim}
-\end{quote}
-after the \verb=\maketitle= command.
-% \layout{}
-
-\subsection{Fonts}
-
-For uniformity, Adobe's {\bf Times Roman} font should be
-used. In \LaTeX2e{} this is accomplished by putting
-
-\begin{quote}
-\begin{verbatim}
-\usepackage{times}
-\usepackage{latexsym}
-\end{verbatim}
-\end{quote}
-in the preamble. If Times Roman is unavailable, use {\bf Computer
-  Modern Roman} (\LaTeX2e{}'s default).  Note that the latter is about
-  10\% less dense than Adobe's Times Roman font.
-
-
 
 \subsection{Sections}
 
@@ -225,7 +193,7 @@ line.\footnote{Note the line separating the footnotes from the text.}
 \end{quote}
 will be added to the bottom of all papers when proceedings are
 edited. If, for some reason, this copyright notice is not adequate for
-your paper, please contact the program chairs as soon as possible. 
+your paper, please contact the program chairs as soon as possible.
 
 \subsection{Graphics}
 
@@ -243,5 +211,49 @@ the figures and tables below the body, using 10-point text.
 \bibliographystyle{apalike}
 \bibliography{mtsummit2015}
 
+\begin{appendices}
+\section{Supervised NMT Model}
+\label{appendix:supervised}
+\begin{lstlisting}
+(encoder): RNNEncoder(
+  (embeddings): Embeddings(
+    (make_embedding): Sequential(
+      (emb_luts): Elementwise(
+        (0): Embedding(N, 300, padding_idx=1)
+      )
+    )
+  )
+  (rnn): LSTM(300, 400, num_layers=3, dropout=0.3)
+)
+(decoder): InputFeedRNNDecoder(
+  (embeddings): Embeddings(
+    (make_embedding): Sequential(
+      (emb_luts): Elementwise(
+        (0): Embedding(M, 300, padding_idx=1)
+      )
+    )
+  )
+  (dropout): Dropout(p=0.3)
+  (rnn): StackedLSTM(
+    (dropout): Dropout(p=0.3)
+    (layers): ModuleList(
+      (0): LSTMCell(700, 400)
+      (1): LSTMCell(400, 400)
+      (2): LSTMCell(400, 400)
+    )
+  )
+  (attn): GlobalAttention(
+    (linear_in): Linear(in_features=400, out_features=400)
+    (linear_out): Linear(in_features=800, out_features=400)
+    (sm): Softmax()
+    (tanh): Tanh()
+  )
+)
+(generator): Sequential(
+  (0): Linear(in_features=400, out_features=M)
+  (1): LogSoftmax()
+)
+\end{lstlisting}
+\end{appendices}
 
 \end{document}

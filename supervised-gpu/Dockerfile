@@ -2,7 +2,7 @@ FROM nvidia/cuda:9.0-cudnn7-devel-ubuntu16.04
 MAINTAINER OBOTUROV Artem
 
 RUN apt-get update && apt-get install -y --no-install-recommends \
-      git \
+    git \
     binutils \
     ca-certificates \
     cmake-data \
@@ -22,7 +22,7 @@ RUN apt-get update && apt-get install -y --no-install-recommends \
     rm -rf /var/lib/apt/lists/* && \
   pip3 install --upgrade pip
 
-RUN pip3 install http://download.pytorch.org/whl/cu90/torch-0.3.0.post4-cp35-cp35m-linux_x86_64.whl 
+RUN pip3 install http://download.pytorch.org/whl/cu90/torch-0.3.0.post4-cp35-cp35m-linux_x86_64.whl
 
 RUN mkdir -p /model
 
@@ -57,4 +57,3 @@ COPY translate.sh /model/
 COPY embeddings_to_torch.py /model/
 
 CMD ["/model/translate.sh", "0", "1", "3", "400"]
-
