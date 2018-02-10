@@ -2,7 +2,8 @@
 \usepackage[letterpaper]{geometry}
 \usepackage{mtsummit2015}
 \usepackage{times}
-\usepackage{url}
+%\usepackage{url}
+\usepackage{hyperref}
 \usepackage{latexsym}
 \usepackage{natbib}
 \usepackage{layout}
@@ -11,6 +12,7 @@
 \usepackage[colorinlistoftodos,prependcaption,textsize=tiny]{todonotes}
 \usepackage{listings}
 \usepackage{color}
+\usepackage{caption}
 
 \newcommand{\confname}{AMTA 2018}
 \newcommand{\website}{\protect\url{https://sites.google.com/view/loresmt/}}
@@ -76,26 +78,32 @@ Embeddings were trained with Fasttext~\citep{bojanowski2016enriching}.
 \begin{tabular}{ l c c c }
 Pair & Epochs & Oblivious Score & Conscious Score \\
 \hline
-\multirow{5}{4em}{En-Ru} & - & 0.02123 & \\
+\multirow{5}{4em}{En-Ru} & - & 0.02123 & - \\
 & 1 & 0.10783 & \\
 & 5 & 0.25747 & \\
 & 10 & 0.28915 & \\
-& - & -  & \\
+& Best & -  & 0.298 \\
 \hline
-\multirow{5}{4em}{Lv-En} & - & 0.02075 & \\
+\multirow{5}{4em}{Lv-En} & - & 0.02075 & - \\
 & 1 & 0.01142 & \\
 & 5 & 0.04766 & \\
 & 10 & 0.05756 & \\
-& - & - & \\
+& Best & - & 0.229 \\
 \hline
-\multirow{5}{4em}{En-Ko} & - & 0.02759 & \\
+\multirow{5}{4em}{En-Ko} & - & 0.02759 & - \\
 & 1 & 0.11179 & \\
 & 5 & 0.22945 & \\
 & 10 & 0.25418 & \\
-& - & - &
+& Best & - & 0.2795
 \end{tabular}
 \end{center}
 \caption{Supervised NMT baselines, measured in BLEU scores.}
+\caption*{\small
+The best {\tt Lv-En} and  {\tt En-Ru} are reported on newstest2017 corpora in \cite{bojar2017findings}.
+% Lv-En \url{http://matrix.statmt.org/matrix/output/1872?score_id=22981}
+%\url{http://matrix.statmt.org/matrix/output/1875?score_id=21229}
+{\tt En-Ko} is reported after \cite{junczys2016coppa} which uses COPPA corpus.
+}
 \label{table:baselines}
 \end{table}
 
@@ -134,6 +142,12 @@ A set of all languages identifiable by the routine could be searched in log-time
 
 \subsection{Would Prior Knowledge Matter?}
 \label{sect:prior}
+
+In the Table~\ref{table:baselines} we also report best BLEU scores available in conference submissions for each of the pairs trained on common corpora.
+
+We could see that a margin of improvement is just a couple of BLEU points for {\tt En-Ru} and {\tt En-Ko} pairs.
+One the other hand, {\tt Lv-En} has very poor result and we would expect that both unsupervised learning and prior knowledge would improve this score.
+It would make sense to only investigate the {\tt Lv-En} further.
 
 \section{Conclusion}
 
