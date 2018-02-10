@@ -63,6 +63,7 @@ docker run -it \
 | Lv-En | 0.02075 | IN -> OUT                                                     |
 | Lv-En | 0.01142 | `supervised-gpu` - GPU, 3 RNN layers, RNN size 400, 1 epoch   |
 | Lv-En | 0.04766 | `supervised-gpu` - GPU, 3 RNN layers, RNN size 400, 5 epochs  |
+| Lv-En | 0.05756 | `supervised-gpu` - GPU, 3 RNN layers, RNN size 400, 10 epochs |
 | En-Ko | 0.02759 | IN -> OUT                                                     |
 | En-Ko | 0.11179 | `supervised-gpu` - GPU, 3 RNN layers, RNN size 400, 1 epoch   |
 | En-Ko | 0.22945 | `supervised-gpu` - GPU, 3 RNN layers, RNN size 400, 5 epochs  |

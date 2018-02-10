@@ -73,23 +73,26 @@ Embeddings were trained with Fasttext~\citep{bojanowski2016enriching}.
 
 \begin{table}
 \begin{center}
-\begin{tabular}{ l c l }
-Pair & Epochs & Score \\
+\begin{tabular}{ l c c c }
+Pair & Epochs & Oblivious Score & Conscious Score \\
 \hline
-\multirow{3}{4em}{En-Ru} & - & 0.02123 \\
-& 1 & 0.10783 \\
-& 5 & 0.25747 \\
-& 10 & 0.28915 \\
+\multirow{5}{4em}{En-Ru} & - & 0.02123 & \\
+& 1 & 0.10783 & \\
+& 5 & 0.25747 & \\
+& 10 & 0.28915 & \\
+& - & -  & \\
 \hline
-\multirow{3}{4em}{Lv-En} & - & 0.02075 \\
-& 1 & 0.01142 \\
-& 5 & 0.04766 \\
-& 10 & 0.05756 \\
+\multirow{5}{4em}{Lv-En} & - & 0.02075 & \\
+& 1 & 0.01142 & \\
+& 5 & 0.04766 & \\
+& 10 & 0.05756 & \\
+& - & - & \\
 \hline
-\multirow{3}{4em}{En-Ko} & - & 0.02759 \\
-& 1 & 0.11179 \\
-& 5 & 0.22945 \\
-& 10 & 0.25418 \\
+\multirow{5}{4em}{En-Ko} & - & 0.02759 & \\
+& 1 & 0.11179 & \\
+& 5 & 0.22945 & \\
+& 10 & 0.25418 & \\
+& - & - &
 \end{tabular}
 \end{center}
 \caption{Supervised NMT baselines, measured in BLEU scores.}
@@ -105,72 +108,34 @@ It could be explained by the fact that {\tt En-Ru} and {\tt En-Ko} were topic-re
 \section{Prior Language Pair Information}
 \label{sect:nonoblivious}
 
-\subsection{Attacking the Language Pair}
+Competition was structured in a way to prevent participants from knowing what language pairs were being tested.
+The only information available to participants was the BLEU score and the failure or success status for the submission.
+One could devise at least two attacks to identify the language pair and then using this prior knowledge to consturct a better translation algorithm.
+
+First we explore the nature of those attacks and then measure what might be an impact of such knowledge.
+
+\subsection{Side-Channel Attacks against the Language Pair}
 \label{sect:attack}
+
+We describe two ways how language pair identification attack could be executed.
+
+\subsubsection{Using Execution Time}
+
+There's a way to identify the language pair in one submission by using the side-channel attack technique.
+In this particular case, the side-channel would be the execution time of the translation algorithm.
+Whereby a language identification routine is ran on each of the non-parallel corpora and both languages of the pair are detected.
+Given that the routine could identify $N$ languages, all the pairs could be enumerated to define a mapping to natural numbers in rage $1\dots N*(N-1)$.
+Provided that a specific constant delay is used, one could divide the total execution time by the delay duration to obtain the index of pair in the mapping.
+
+\subsubsection{Using Failure Status}
+
+The second way is a slower combinatorial way where a failure status is used as an indicator of the language belonging to a subset of languages being tested.
+A set of all languages identifiable by the routine could be searched in log-time in a breadth search fashion descending only into subsets where we have established inclusion relationship.
 
 \subsection{Would Prior Knowledge Matter?}
 \label{sect:prior}
 
 \section{Conclusion}
-
-%This text format is derived from that of the Journal of Evolutionary
-%Computation.\footnote{Originally written by Darrell Whitley, and only
-%  later modified by Marc Schoenauer, especially regarding the
-%  bibliography style}
-
-\subsection{Sections}
-
-{\bf Headings}: Type and label section and subsection headings in the
-style shown on the present document.  Use numbered sections (Arabic
-numerals) in order to facilitate cross references. Number subsections
-with the section number and the subsection number separated by a dot,
-in Arabic numerals. Do not number subsubsections. Use 9-point bold
-font for subsection headings and 11-point bold font for section
-headings.
-
-{\bf Citations}: Citations within the text appear in parentheses
-as~\citep{Smith} or, if the author's name appears in the text itself,
-as \cite{Smith}. Citations in parentheses should not be used as
-linguistic phrases; for example, instead of ``\citep{Smith}
-\nobreak{argues} that \ldots'' say ``\cite{Smith} \nobreak{argues}
-that \ldots''.  Treat double authors as in~\citep{DD15}, but write as
-in~\citep{PDC} when more than two authors are involved.
-\nobreak{Append} lowercase letters to the year in cases of ambiguity
-as in \citep{JonesFirst}.  Collapse multiple citations in parenthesis
-as in~\citep{Smith,JonesFirst} and like this for multiple citations
-with the same-named \nobreak{author:}
-\citep{Smith,SmithConc,JonesFirst,JonesSecond}
-%(Tam and Schultz, 2006, 2007; Gledson and Keane, 2008a,b).
-
-\textbf{References}: Gather the full set of references together under the
-heading {\bf References}; place the section before any Appendices, unless they
-contain references. Arrange the references alphabetically by the first
-author's last-name, rather than by order of occurrence in the text, and invert
-the first-name and last-name of the first author (only). Provide as complete
-a citation as possible, using a consistent format, such as the one for {\em
-North American Opera\/}.  Use of full names for
-authors rather than initials is preferred.  Use full names for journals and
-conferences, not abbreviations (for example ``45th Meeting of the Association
-for Computational Linguistics'', not ``ACL07'').
-
-The \LaTeX2e{} and Bib\TeX{} style files provided roughly fit the
-American Psychological Association format, allowing regular citations,
-short citations and multiple citations as described above.
-
-{\bf Appendices}: Appendices, if any, directly follow the text and the
-references (but see above).  Letter them in sequence and provide an
-informative title: {\bf Appendix A. Title of Appendix}.
-
-\textbf{Acknowledgement} section should go as a last section immediately
-\textit{before the references}.  Do not number the acknowledgement section.
-
-\subsection{Footnotes}
-
-{\bf Footnotes}: Put footnotes at the bottom of the page and use
-9-point font. They may be numbered or referred to by asterisks or
-other symbols.\footnote{This is how a footnote should appear.}
-Footnotes should be separated from the main text by a
-line.\footnote{Note the line separating the footnotes from the text.}
 
 \small
 
