@@ -51,9 +51,9 @@
 \todo[inline]{Write problem statement}
 
 Given the problem at hand one could devise a number of baseline approaches and then compare them to the unsupervised model described above.
-Section~\ref{sec:baselines} outlines the baselines which were used to benchmark the UNMT in the oblivious setup.
-In Section~\ref{sec:unmt} we perform experiments with the UNMT model for the oblivious setup.
-Finally, in Section~\ref{sec:nonoblivious} we are investigating whether prior knowledge of a language pair gives an advantage for the UNMT approach.
+Section~\ref{sect:baselines} outlines the baselines which were used to benchmark the UNMT in the oblivious setup.
+In Section~\ref{sect:unmt} we perform experiments with the UNMT model for the oblivious setup.
+Finally, in Section~\ref{sect:nonoblivious} we are investigating whether prior knowledge of a language pair gives an advantage for the UNMT approach.
 
 \section{Baselines}
 \label{sect:baselines}
@@ -63,7 +63,7 @@ The model was implemented in OpenNMT~\citep{opennmt} and had the following Encod
 \begin{itemize}
 \item encoder is a continuous embedding from the source language to a $300$ dimensional space;
 \item followed by a $3$-layers LSTM with a dropout;
-\item the decoder has a stacked LSTM with a dropout, a global attention \citep{bahdanau2014neural} and a continuous embedding from a $300$ dimensional space,
+\item the decoder has a stacked LSTM with a dropout, a global attention \citep{luong2015effective} and a continuous embedding from a $300$ dimensional space,
 \end{itemize}
 full description is given in an Appendix~\ref{appendix:supervised}.
 
@@ -113,13 +113,16 @@ It could be explained by the fact that {\tt En-Ru} and {\tt En-Ko} were topic-re
 \section{Unsupervised Neural Machine Translation}
 \label{sect:unmt}
 
-Competition included not only parallel corpus for each language pair but  {\tt 1KK} monolingual corpus for each language. One way to leverage this data is to use unsupervised NMT model described in \cite{DBLP:journals/corr/abs-1711-00043}. The code for this model is not available, so we built our own system based on PyTorch framework. 
+Competition included not only parallel corpus for each language pair but  {\tt 1M} monolingual corpus for each language.
+One way to leverage this data is to use unsupervised NMT model described in \cite{DBLP:journals/corr/abs-1711-00043}.
+The code for this model is not available, so we built our own implementation~\footnote{\url{https://github.com/IlyaGusev/UNMT}} based on PyTorch framework. 
 
 Our system can be used in several ways. First, one can use it like ordinary supervised NMT system. Second, it can perform as denoising autoencoder. Finally, one can train this model on monolingual corpora using predefined zero model.
 
 There are several types of zero models such as word by word model, supervised model trained on a small corpora, unsupervised model from the previous step.
 
 System showed good results in first two tasks, but failed in the last one. We don't know whether there is an error in our system or the corpora are too small. BLEU scores on all language pairs were below {\tt 0.01 BLEU}.
+The NMT model used for translation is described in Appendix~\ref{appendix:unsupervised}.
 
 \section{Prior Language Pair Information}
 \label{sect:nonoblivious}
@@ -159,6 +162,11 @@ It would make sense to only investigate the {\tt Lv-En} further.
 
 \section{Conclusion}
 
+\section{Data availability and reproducibility}
+Data for training and test are not available publicly, although one could ask organizers to obtain them.
+
+Images used to train models are publicly available at \url{https://github.com/aoboturov/loresmt-nlprocessing}.
+
 \small
 
 \bibliographystyle{apalike}
@@ -168,6 +176,10 @@ It would make sense to only investigate the {\tt Lv-En} further.
 \section{Supervised NMT Model}
 \label{appendix:supervised}
 \lstinputlisting{supervised-model.txt}
+
+\section{Unsupervised NMT Model}
+\label{appendix:unsupervised}
+\lstinputlisting{unsupervised-model.txt}
 \end{appendices}
 
 \end{document}

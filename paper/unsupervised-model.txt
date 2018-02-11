@@ -1,0 +1,20 @@
+UNMT(
+  (encoder): EncoderRNN(
+    (embedding): Embedding(80007, 300)
+    (rnn): LSTM(300, 50, num_layers=3, dropout=0.1, bidirectional=True)
+  )
+  (decoder): AttnDecoderRNN(
+    (embedding): Embedding(80007, 300)
+    (attn): Attn(
+      (attn): Linear(in_features=100, out_features=100)
+      (sm): Softmax()
+      (out): Linear(in_features=200, out_features=100)
+      (tanh): Tanh()
+    )
+    (rnn): LSTM(400, 100, num_layers=3, dropout=0.1)
+  )
+  (generator): Generator(
+    (out): Linear(in_features=100, out_features=80007)
+    (sm): LogSoftmax()
+  )
+)

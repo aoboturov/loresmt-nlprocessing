@@ -1,6 +1,3 @@
-* number of examples: 47429
-* vocabulary size. source = 24201; target = 46527
-
 NMTModel(
   (encoder): RNNEncoder(
     (embeddings): Embeddings(
@@ -41,7 +38,3 @@ NMTModel(
     (1): LogSoftmax()
   )
 )
-
-* number of parameters: 48374927
-* encoder:  10949900
-* decoder:  37425027
