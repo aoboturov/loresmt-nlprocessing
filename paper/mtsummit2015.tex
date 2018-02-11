@@ -33,7 +33,7 @@
 \title{\bf (Un)Supervised Machine Translation \\
   for the \confname~Conference}
 \author{\name{\bf Ilya Gusev} \hfill  \addr{ilya.gusev@phystech.edu}\\
-        \addr{MPTI, Dolgoprudny, Moscow Region, 141701, Russian Federation}
+        \addr{MIPT, Dolgoprudny, Moscow Region, 141701, Russian Federation}
 \AND
         \name{\bf Artem Oboturov} \hfill \addr{oboturov@gmail.com}
 }
@@ -113,6 +113,14 @@ It could be explained by the fact that {\tt En-Ru} and {\tt En-Ko} were topic-re
 \section{Unsupervised Neural Machine Translation}
 \label{sect:unmt}
 
+Competition included not only parallel corpus for each language pair but  {\tt 1KK} monolingual corpus for each language. One way to leverage this data is to use unsupervised NMT model described in \cite{DBLP:journals/corr/abs-1711-00043}. The code for this model is not available, so we built our own system based on PyTorch framework. 
+
+Our system can be used in several ways. First, one can use it like ordinary supervised NMT system. Second, it can perform as denoising autoencoder. Finally, one can train this model on monolingual corpora using predefined zero model.
+
+There are several types of zero models such as word by word model, supervised model trained on a small corpora, unsupervised model from the previous step.
+
+System showed good results in first two tasks, but failed in the last one. We don't know whether there is an error in our system or the corpora are too small. BLEU scores on all language pairs were below {\tt 0.01 BLEU}.
+
 \section{Prior Language Pair Information}
 \label{sect:nonoblivious}
 
@@ -163,3 +171,4 @@ It would make sense to only investigate the {\tt Lv-En} further.
 \end{appendices}
 
 \end{document}
+
