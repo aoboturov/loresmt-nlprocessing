@@ -43,12 +43,27 @@
 
 \begin{abstract}
   A comparision of supervised and unsupervised NMT models was done for the corpora provided by the DeepHack.Babel competition.
+  It is shown that for even small parallel corpus, fully supervised NMT gives better results than fully unsupervised for the case of constrained domain of the corpus.
   \todo[inline]{Write an abstract}
 \end{abstract}
 
 \section{Introduction}
 
-\todo[inline]{Write problem statement}
+We present results obtained by the NL Processing team during the DeepHack.Babel hackathon~\footnote{\url{http://babel.tilda.ws/}} on semi-supervised machine translation.
+Organizers of the competition created an oblivious setup - the case when the source and target languages are not known and the machine translation system would be trained with no specific tuning to the language pair.
+The scoring system would run training and then run translation with the trained model.
+Participants have no insight into the process and could only observe the final score for a submission and/or the failure status.
+Submissions were scored in BLEU-4~\citep{papineni2002bleu}.
+
+For each language pair the following datasets~\footnote{\url{http://contest.deephack.me/c/babel/overview}} were available:
+\begin{itemize}
+  \item two monogingual corpora in for each language of the pair;
+  \item a small parallel corpus;
+  \item and an input corpus to be translated from source to target language.
+\end{itemize}
+
+One could see that the machine translation system could be built as a fully supervised one, albeit given a small parallel corpus only; as an unsupervised one, using the two monolingual corpora; and as a semi-supervised one.
+Our solutions followed the fully supervised and fully unsupervised approaches only.
 
 Given the problem at hand one could devise a number of baseline approaches and then compare them to the unsupervised model described above.
 Section~\ref{sect:baselines} outlines the baselines which were used to benchmark the UNMT in the oblivious setup.
@@ -160,7 +175,11 @@ We could see that a margin of improvement is just a couple of BLEU points for {\
 One the other hand, {\tt Lv-En} has very poor result and we would expect that both unsupervised learning and prior knowledge would improve this score.
 It would make sense to only investigate the {\tt Lv-En} further.
 
+\todo[inline]{Elaborate on Lv-En language pair}
+
 \section{Conclusion}
+
+\todo[inline]{Write a conclusion}
 
 \section{Data availability and reproducibility}
 Data for training and test are not available publicly, although one could ask organizers to obtain them.
