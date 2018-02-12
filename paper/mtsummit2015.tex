@@ -44,7 +44,7 @@
 \begin{abstract}
   A comparision of supervised and unsupervised NMT models was done for the corpora provided by the DeepHack.Babel competition.
   It is shown that for even small parallel corpus, fully supervised NMT gives better results than fully unsupervised for the case of constrained domain of the corpus.
-  \todo[inline]{Write an abstract}
+  We have also implemented a recent fully unsupervised NMT model which has given good final results.
 \end{abstract}
 
 \section{Introduction}
@@ -118,6 +118,7 @@ The best {\tt Lv-En} and  {\tt En-Ru} are reported on newstest2017 corpora in \c
 % Lv-En \url{http://matrix.statmt.org/matrix/output/1872?score_id=22981}
 %\url{http://matrix.statmt.org/matrix/output/1875?score_id=21229}
 {\tt En-Ko} is reported after \cite{junczys2016coppa} which uses COPPA corpus.
+{\tt Best} here provides an indicative upper boundary on what an MT system trained on a generic parallel corpus might score on a translation task.
 }
 \label{table:baselines}
 \end{table}
@@ -184,13 +185,16 @@ In the Table~\ref{table:baselines} we also report best BLEU scores available in 
 
 We could see that a margin of improvement is just a couple of BLEU points for {\tt En-Ru} and {\tt En-Ko} pairs.
 One the other hand, {\tt Lv-En} has very poor result and we would expect that both unsupervised learning and prior knowledge would improve this score.
-It would make sense to only investigate the {\tt Lv-En} further.
+%It would make sense to only investigate the {\tt Lv-En} further.
 
-\todo[inline]{Elaborate on Lv-En language pair}
+%\todo[inline]{Elaborate on Lv-En language pair}
 
 \section{Conclusion}
 
-\todo[inline]{Write a conclusion}
+A generic fully unsupervised machine translation problem is hard.
+In some cases, one could obtain good machine translation models by having a small data set for a limited domain, e.g. for a case of hotel descriptions, or some other domain-specific translation.
+Although semi-supervised translation might improve the results, we have not observed that a fully supervised model used as the zero model for the UNMT made any translation improvement over a regular supervised model.
+Poor performance of the UNMT has to be investigated further, possibly by providing larger non-parallel corpora and changing UNMT model architecture.
 
 \section{Data availability and reproducibility}
 Data for training and test are not available publicly, although one could ask organizers to obtain them.
