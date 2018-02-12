@@ -43,7 +43,7 @@
 \pagestyle{empty}
 
 \begin{abstract}
-  A comparision of supervised and unsupervised NMT models was done for the corpora provided by the DeepHack.Babel competition.
+  A comparison of supervised and unsupervised NMT models was done for the corpora provided by the DeepHack.Babel competition.
   It is shown that for even small parallel corpus, fully supervised NMT gives better results than fully unsupervised for the case of constrained domain of the corpus.
   We have also implemented a recent fully unsupervised NMT model which has given good final results.
 \end{abstract}
@@ -166,6 +166,47 @@ One could devise at least two attacks to identify the language pair and then usi
 
 First we will explore the nature of those attacks and then measure what might be an impact of such knowledge.
 
+\begin{table}[h!]
+\begin{center}
+\begin{tabular}{ l p{10cm} }
+Pair & Sentences \\
+\hline
+\multirow{2}{4em}{En-Ru}
+& Nieuwmarkt as well as Kalverstraat, Hermitage and Rembrandtplein are within 15 minutes walking. \\
+& \begin{otherlanguage*}{russian}
+До площади Ниумаркт, торговой улицы Калверштрат, музея Эрмитаж на Амстеле и площади Рембрандта можно дойти менее чем за 15 минут.
+\end{otherlanguage*} \\
+\hline
+\multirow{2}{4em}{En-Ru}
+& The Danube Delta is a natural reserve where you can go fishing, bird watching, take boat rides or simply unwind surrounded by nature. \\
+& \begin{otherlanguage*}{russian}
+Дельта Дуная является природным заповедником, в котором можно заняться рыбной ловлей, понаблюдать за птицами, покататься на лодке или просто расслабиться в окружении природы. \end{otherlanguage*} \\
+\hline
+\multirow{2}{4em}{Lv-En}
+& Vienīgais pētījums, kurā Latvija tikusi kritizēta, saņemts no starptautisko aizdevēju (viens no tiem Eiropas Komisija) pēcprogrammas uzraudzības misijas. \\
+& The only survey that had Latvia criticized came from the post-supervisory mission of international creditors. \\
+\hline
+\multirow{2}{4em}{Lv-En}
+& Es nezinu visas detaļas, bet par tām, kurām zinu, man šķiet, ka visam jābeidzas labi. \\
+& I don’t know all the details, but facts I do know make me believe everything will be alright. \\
+\hline
+\multirow{2}{4em}{En-Ko}
+& Free wired internet, an LCD TV and an en suite bathroom are included in this air-conditioned room. \\
+& \begin{CJK}{UTF8}{mj}
+  이 객실은 무료 유선 인터넷, LCD TV, 실내 욕실과 에어컨을 갖추고 있습니다.
+  \end{CJK} \\
+\hline
+\multirow{2}{4em}{En-Ko}
+& Air-conditioned room with heating and features a hairdryer and towels. \\
+& \begin{CJK}{UTF8}{mj}
+  에어컨과 난방 시설이 완비된 이 객실에는 헤어드라이어와 수건이 비치되어 있습니다.
+  \end{CJK}
+\end{tabular}
+\end{center}
+\caption{Examples of sentences from parallel corpora for all language pairs.}
+\label{table:corpora_examples}
+\end{table}
+
 \subsection{Side-Channel Attacks against the Language Pair}
 \label{sect:attack}
 
@@ -223,47 +264,6 @@ En-Ko & 14M & 157649 & 7M & 530124 \\
 \end{table}
 
 In Table~\ref{table:corpora_examples} we provide a sample of sentences from parallel corpora.
-
-\begin{table}
-\begin{center}
-\begin{tabular}{ l p{10cm} }
-Pair & Sentences \\
-\hline
-\multirow{2}{4em}{En-Ru}
-& Nieuwmarkt as well as Kalverstraat, Hermitage and Rembrandtplein are within 15 minutes walking. \\
-& \begin{otherlanguage*}{russian}
-До площади Ниумаркт, торговой улицы Калверштрат, музея Эрмитаж на Амстеле и площади Рембрандта можно дойти менее чем за 15 минут.
-\end{otherlanguage*} \\
-\hline
-\multirow{2}{4em}{En-Ru}
-& The Danube Delta is a natural reserve where you can go fishing, bird watching, take boat rides or simply unwind surrounded by nature. \\
-& \begin{otherlanguage*}{russian}
-Дельта Дуная является природным заповедником, в котором можно заняться рыбной ловлей, понаблюдать за птицами, покататься на лодке или просто расслабиться в окружении природы. \end{otherlanguage*} \\
-\hline
-\multirow{2}{4em}{Lv-En}
-& Vienīgais pētījums, kurā Latvija tikusi kritizēta, saņemts no starptautisko aizdevēju (viens no tiem Eiropas Komisija) pēcprogrammas uzraudzības misijas. \\
-& The only survey that had Latvia criticized came from the post-supervisory mission of international creditors. \\
-\hline
-\multirow{2}{4em}{Lv-En}
-& Es nezinu visas detaļas, bet par tām, kurām zinu, man šķiet, ka visam jābeidzas labi. \\
-& I don’t know all the details, but facts I do know make me believe everything will be alright. \\
-\hline
-\multirow{2}{4em}{En-Ko}
-& Free wired internet, an LCD TV and an en suite bathroom are included in this air-conditioned room. \\
-& \begin{CJK}{UTF8}{mj}
-  이 객실은 무료 유선 인터넷, LCD TV, 실내 욕실과 에어컨을 갖추고 있습니다.
-  \end{CJK} \\
-\hline
-\multirow{2}{4em}{En-Ko}
-& Air-conditioned room with heating and features a hairdryer and towels. \\
-& \begin{CJK}{UTF8}{mj}
-  에어컨과 난방 시설이 완비된 이 객실에는 헤어드라이어와 수건이 비치되어 있습니다.
-  \end{CJK}
-\end{tabular}
-\end{center}
-\caption{Examples of sentences from parallel corpora for all language pairs.}
-\label{table:corpora_examples}
-\end{table}
 
 Images used to train models are publicly available at \url{https://github.com/aoboturov/loresmt-nlprocessing}.
 
