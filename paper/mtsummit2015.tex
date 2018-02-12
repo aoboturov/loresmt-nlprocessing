@@ -2,7 +2,6 @@
 \usepackage[letterpaper]{geometry}
 \usepackage{mtsummit2015}
 \usepackage{times}
-%\usepackage{url}
 \usepackage{hyperref}
 \usepackage{latexsym}
 \usepackage{natbib}
@@ -13,6 +12,9 @@
 \usepackage{listings}
 \usepackage{color}
 \usepackage{caption}
+\usepackage{CJKutf8}
+\usepackage[utf8]{inputenc}
+\usepackage[russian,english]{babel}
 
 \newcommand{\confname}{AMTA 2018}
 \newcommand{\website}{\protect\url{https://sites.google.com/view/loresmt/}}
@@ -30,8 +32,7 @@
 \begin{document}
 
 % \mtsummitHeader{x}{x}{xxx-xxx}{2015}{45-character paper description goes here}{Author(s) initials and last name go here}
-\title{\bf (Un)Supervised Machine Translation \\
-  for the \confname~Conference}
+\title{\bf Would Unsupervised NMT Improve over Supervised NMT for the Case of Low Resource Languages on a Constrained Domain Corpus?}
 \author{\name{\bf Ilya Gusev} \hfill  \addr{ilya.gusev@phystech.edu}\\
         \addr{MIPT, Dolgoprudny, Moscow Region, 141701, Russian Federation}
 \AND
@@ -48,6 +49,7 @@
 \end{abstract}
 
 \section{Introduction}
+\label{sect:intro}
 
 We present results obtained by the NL Processing team during the DeepHack.Babel hackathon~\footnote{\url{http://babel.tilda.ws/}} on semi-supervised machine translation.
 Organizers of the competition created an oblivious setup - the case when the source and target languages are not known and the machine translation system would be trained with no specific tuning to the language pair.
@@ -57,10 +59,12 @@ Submissions were scored in BLEU-4~\citep{papineni2002bleu}.
 
 For each language pair the following datasets~\footnote{\url{http://contest.deephack.me/c/babel/overview}} were available:
 \begin{itemize}
-  \item two monogingual corpora in for each language of the pair;
-  \item a small parallel corpus;
-  \item and an input corpus to be translated from source to target language.
+  \item two monogingual corpora in for each language of the pair, {\tt 1M} sentences;
+  \item a small parallel corpus, {\tt 50K} sentence pairs;
+  \item and an input corpus to be translated from source to target language, {\tt 6K} sentences.
 \end{itemize}
+There were 3 language pairs used during the competition: {\tt En-Ru} for test, {\tt Lv-En} for qualification and {\tt En-Ko} for final scoring.
+More information about corpora is available in Section~\ref{sect:data}.
 
 One could see that the machine translation system could be built as a fully supervised one, albeit given a small parallel corpus only; as an unsupervised one, using the two monolingual corpora; and as a semi-supervised one.
 Our solutions followed the fully supervised and fully unsupervised approaches only.
@@ -124,7 +128,7 @@ The best {\tt Lv-En} and  {\tt En-Ru} are reported on newstest2017 corpora in \c
 \end{table}
 
 One could notice, that on the {\tt Lv-En} langauge pair, model performance was mediocre.
-It could be explained by the fact that {\tt En-Ru} and {\tt En-Ko} were topic-resticted corpora - both were descriptions of hotels only, while the {\tt Lv-En} corpora was extracted from a news feed which had no topics constraints.
+It could be explained by the fact that {\tt En-Ru} and {\tt En-Ko} were topic-resticted corpora - both were related to tourism only, while the {\tt Lv-En} corpora was extracted from a news feed which had no topics constraints.
 
 \section{Unsupervised Neural Machine Translation}
 \label{sect:unmt}
@@ -192,12 +196,57 @@ One the other hand, {\tt Lv-En} has very poor result and we would expect that bo
 \section{Conclusion}
 
 A generic fully unsupervised machine translation problem is hard.
-In some cases, one could obtain good machine translation models by having a small data set for a limited domain, e.g. for a case of hotel descriptions, or some other domain-specific translation.
+In some cases, one could obtain good machine translation models by having a small data set for a limited domain, e.g. for a case of travelling destinations, or some other domain-specific translation.
 Although semi-supervised translation might improve the results, we have not observed that a fully supervised model used as the zero model for the UNMT made any translation improvement over a regular supervised model.
 Poor performance of the UNMT has to be investigated further, possibly by providing larger non-parallel corpora and changing UNMT model architecture.
 
 \section{Data availability and reproducibility}
-Data for training and test are not available publicly, although one could ask organizers to obtain them.
+\label{sect:data}
+
+Data for training and test are not available publicly and organizers would not release them.
+Datasets were already summarized in Section~\ref{sect:intro}.
+In Table~\ref{table:corpora_examples} we provide a number of sentences from parallel corpora.
+
+\begin{table}
+\begin{center}
+\begin{tabular}{ l p{10cm} }
+Pair & Sentences \\
+\hline
+\multirow{2}{4em}{En-Ru}
+& Nieuwmarkt as well as Kalverstraat, Hermitage and Rembrandtplein are within 15 minutes walking. \\
+& \begin{otherlanguage*}{russian}
+До площади Ниумаркт, торговой улицы Калверштрат, музея Эрмитаж на Амстеле и площади Рембрандта можно дойти менее чем за 15 минут.
+\end{otherlanguage*} \\
+\hline
+\multirow{2}{4em}{En-Ru}
+& The Danube Delta is a natural reserve where you can go fishing, bird watching, take boat rides or simply unwind surrounded by nature. \\
+& \begin{otherlanguage*}{russian}
+Дельта Дуная является природным заповедником, в котором можно заняться рыбной ловлей, понаблюдать за птицами, покататься на лодке или просто расслабиться в окружении природы. \end{otherlanguage*} \\
+\hline
+\multirow{2}{4em}{Lv-En}
+& Vienīgais pētījums, kurā Latvija tikusi kritizēta, saņemts no starptautisko aizdevēju (viens no tiem Eiropas Komisija) pēcprogrammas uzraudzības misijas. \\
+& The only survey that had Latvia criticized came from the post-supervisory mission of international creditors. \\
+\hline
+\multirow{2}{4em}{Lv-En}
+& Es nezinu visas detaļas, bet par tām, kurām zinu, man šķiet, ka visam jābeidzas labi. \\
+& I don’t know all the details, but facts I do know make me believe everything will be alright. \\
+\hline
+\multirow{2}{4em}{En-Ko}
+& Free wired internet, an LCD TV and an en suite bathroom are included in this air-conditioned room. \\
+& \begin{CJK}{UTF8}{mj}
+  이 객실은 무료 유선 인터넷, LCD TV, 실내 욕실과 에어컨을 갖추고 있습니다.
+  \end{CJK} \\
+\hline
+\multirow{2}{4em}{En-Ko}
+& Air-conditioned room with heating and features a hairdryer and towels. \\
+& \begin{CJK}{UTF8}{mj}
+  에어컨과 난방 시설이 완비된 이 객실에는 헤어드라이어와 수건이 비치되어 있습니다.
+  \end{CJK}
+\end{tabular}
+\end{center}
+\caption{Examples of sentences from parallel corpora for all language pairs.}
+\label{table:corpora_examples}
+\end{table}
 
 Images used to train models are publicly available at \url{https://github.com/aoboturov/loresmt-nlprocessing}.
 
