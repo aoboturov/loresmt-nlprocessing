@@ -1,6 +1,22 @@
 # Supplement for the submission to the LoResMT workshop from the NL Processing team
 [Workshop on Technologies for MT of Low Resource Languages (LoResMT)](https://sites.google.com/view/loresmt)
 
+## The corpora extracts
+| # | Pair |  Sentences                                                        |
+|---|------|-------------------------------------------------------------------|
+| 1 | En   | Nieuwmarkt as well as Kalverstraat, Hermitage and Rembrandtplein are within 15 minutes walking. |
+|   | Ru   | До площади Ниумаркт, торговой улицы Калверштрат, музея Эрмитаж на Амстеле и площади Рембрандта можно дойти менее чем за 15 минут. |
+| 2 | En   | The Danube Delta is a natural reserve where you can go fishing, bird watching, take boat rides or simply unwind surrounded by nature. |
+|   | Ru   | Дельта Дуная является природным заповедником, в котором можно заняться рыбной ловлей, понаблюдать за птицами, покататься на лодке или просто расслабиться в окружении природы. |
+| 3 | Lv   | Vienīgais pētījums, kurā Latvija tikusi kritizēta, saņemts no starptautisko aizdevēju (viens no tiem Eiropas Komisija) pēcprogrammas uzraudzības misijas. |
+|   | En   | The only survey that had Latvia criticized came from the post-supervisory mission of international creditors. |
+| 4 | Lv   | Es nezinu visas detaļas, bet par tām, kurām zinu, man šķiet, ka visam jābeidzas labi. |
+|   | En   | I don’t know all the details, but facts I do know make me believe everything will be alright. |
+| 5 | En   | Free wired internet, an LCD TV and an en suite bathroom are included in this air-conditioned room. |
+|   | Ko   | 이 객실은 무료 유선 인터넷, LCD TV, 실내 욕실과 에어컨을 갖추고 있습니다. |
+| 6 | En   | Air-conditioned room with heating and features a hairdryer and towels. |
+|   | Ko   | 에어컨과 난방 시설이 완비된 이 객실에는 헤어드라이어와 수건이 비치되어 있습니다. |
+
 ## Technical setup
 One would need an LTS 16.04 Ubuntu in order to run this set up.
 
