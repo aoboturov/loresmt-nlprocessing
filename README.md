@@ -43,6 +43,52 @@ docker run \
 ```
 
 ## Results
+### Supervised model description
+A default [OpenNMT-py](https://github.com/OpenNMT/OpenNMT-py) Encoder-Decoder architecture with `N_SRC` and `N_TGT` parameters specifying vocabulary sizes for *src* and *tgt* languages respectively.
+
+```
+NMTModel(
+  (encoder): RNNEncoder(
+    (embeddings): Embeddings(
+      (make_embedding): Sequential(
+        (emb_luts): Elementwise(
+          (0): Embedding(N_SRC, 300, padding_idx=1)
+        )
+      )
+    )
+    (rnn): LSTM(300, 400, num_layers=3, dropout=0.3)
+  )
+  (decoder): InputFeedRNNDecoder(
+    (embeddings): Embeddings(
+      (make_embedding): Sequential(
+        (emb_luts): Elementwise(
+          (0): Embedding(N_TGT, 300, padding_idx=1)
+        )
+      )
+    )
+    (dropout): Dropout(p=0.3)
+    (rnn): StackedLSTM(
+      (dropout): Dropout(p=0.3)
+      (layers): ModuleList(
+        (0): LSTMCell(700, 400)
+        (1): LSTMCell(400, 400)
+        (2): LSTMCell(400, 400)
+      )
+    )
+    (attn): GlobalAttention(
+      (linear_in): Linear(in_features=400, out_features=400)
+      (linear_out): Linear(in_features=800, out_features=400)
+      (sm): Softmax()
+      (tanh): Tanh()
+    )
+  )
+  (generator): Sequential(
+    (0): Linear(in_features=400, out_features=N_TGT)
+    (1): LogSoftmax()
+  )
+)
+```
+
 ### Supervised model trained on a 50K parallel corpus
 ```
 docker run -it \
@@ -80,4 +126,45 @@ docker run -it \
     --memory=8g \
     --runtime=nvidia \
     kwakinalabs/deephack-finals-v2
+```
+
+### UNMT model description
+An architecture of Encoder-Decoder with attention where the embedding dimension for encoder and decoder is both `N_BIDI` because UNMT uses a single common dictionary.
+It is a combination of sizes of `N_SRC` and `N_TGT`, which are specifying vocabulary sizes for *src* and *tgt* languages respectively.
+
+```
+UNMT(
+  (encoder): EncoderRNN(
+    (embedding): Embedding(N_BIDI, 300)
+    (rnn): LSTM(300, 50, num_layers=3, dropout=0.1, bidirectional=True)
+  )
+  (decoder): AttnDecoderRNN(
+    (embedding): Embedding(N_BIDI, 300)
+    (attn): Attn(
+      (attn): Linear(in_features=100, out_features=100)
+      (sm): Softmax()
+      (out): Linear(in_features=200, out_features=100)
+      (tanh): Tanh()
+    )
+    (rnn): LSTM(400, 100, num_layers=3, dropout=0.1)
+  )
+  (generator): Generator(
+    (out): Linear(in_features=100, out_features=N_BIDI)
+    (sm): LogSoftmax()
+  )
+)
+```
+
+### UNMT discriminator description
+Discriminator takes the latent space size `LS_SIZE` as the input dimension to infer whether it could be fooled to predict the language of the output produced by the embedding.
+
+```
+(discriminator): Discriminator(
+  (layers): ModuleList(
+    (0): Linear(in_features=LS_SIZE, out_features=1024)
+    (1): Linear(in_features=1024, out_features=1024)
+    (2): Linear(in_features=1024, out_features=1024)
+  )
+  (out): Linear(in_features=1024, out_features=1)
+)
 ```
