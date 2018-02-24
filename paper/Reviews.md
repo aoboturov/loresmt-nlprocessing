@@ -190,6 +190,17 @@ and 2
 * If you give a name "no-Epoch" to the "input to output copy" use it in the
 table (instead of "-").
 
+### Response
++ All the acronyms were defined where applicable.
++ Input to Output Copy helps to debug UNMT as is now explained in the UNMT with a dictionary translation zero model subsection.
++ Section 4 indeed explains how someone could work around the oblivious setup constraints.
+Although if you look at our models and how they were trained - you would find a proof that we have not done any of it.
+Please check our sources https://github.com/aoboturov/loresmt-nlprocessing which are available online.
++ Changed wording for `two monolonigual corpora for each language (in Section 1)`.
++ Changed Table 3 formatting to keep the representation uniform across the paper.
++ Fixed `Section 3: don't -> do not`.
++ Changed model name to `input to output copy`.
+
 ## REVIEWER \#5
 ---------------------------------------------------------------------------
 Reviewer's Scores

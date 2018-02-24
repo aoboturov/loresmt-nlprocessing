@@ -14,6 +14,7 @@
 \usepackage{caption}
 \usepackage[utf8]{inputenc}
 \usepackage[english]{babel}
+\usepackage[nolist,nohyperlinks]{acronym}
 
 \newcommand{\confname}{AMTA 2018}
 \newcommand{\website}{\protect\url{https://sites.google.com/view/loresmt/}}
@@ -30,8 +31,14 @@
 
 \begin{document}
 
+\begin{acronym}
+\acro{NMT}{Neural Machine Translation}
+\acro{MT}{Machine Translation}
+\acro{UNMT}{Unsupervised Machine Translation Using Monolingual Corpora Only model}
+\end{acronym}
+
 % \mtsummitHeader{x}{x}{xxx-xxx}{2015}{45-character paper description goes here}{Author(s) initials and last name go here}
-\title{\bf System description of Supervised and Unsupervised NMT approaches from {NL~Processing} team at DeepHack.Babel task}
+\title{\bf System description of Supervised and Unsupervised  \acl{NMT} approaches from {"NL~Processing"} team at DeepHack.Babel task}
 \author{\name{\bf Ilya Gusev} \hfill  \addr{ilya.gusev@phystech.edu}\\
         \addr{MIPT, Dolgoprudny, Moscow Region, 141701, Russian Federation}
 \AND
@@ -42,15 +49,15 @@
 \pagestyle{empty}
 
 \begin{abstract}
-  A comparison of supervised and unsupervised NMT models was done for the corpora provided by the DeepHack.Babel competition.
-  It is shown that for even small parallel corpus, fully supervised NMT gives better results than fully unsupervised for the case of constrained domain of the corpus.
-  We have also implemented a recent fully unsupervised NMT model which has given good final results.
+  A comparison of supervised and unsupervised \ac{NMT} models was done for the corpora provided by the DeepHack.Babel competition.
+  It is shown that for even small parallel corpus, fully supervised \ac{NMT} gives better results than fully unsupervised for the case of constrained domain of the corpus.
+  We have also implemented a recent fully unsupervised \ac{NMT} model which has given good final results.
 \end{abstract}
 
 \section{Introduction}
 \label{sect:intro}
 
-We present results obtained by the NL Processing team during the DeepHack.Babel hackathon~\footnote{\url{http://babel.tilda.ws/}} on semi-supervised machine translation.
+We present results obtained by the "NL~Processing" team during the DeepHack.Babel hackathon~\footnote{\url{http://babel.tilda.ws/}} on semi-supervised machine translation.
 Organizers of the competition created an oblivious setup - a case in which the source and target languages are not known and the machine translation system can be trained with no specific tuning to the language pair.
 The scoring system would run training and then run translation with the trained model.
 Participants have no insight into the process and could only observe the final score for a submission and/or the failure status.
@@ -58,7 +65,7 @@ Submissions were scored in BLEU-4~\citep{papineni2002bleu}.
 
 For each language pair the following datasets~\footnote{\url{http://contest.deephack.me/c/babel/overview}} were available:
 \begin{itemize}
-  \item two monolingual corpora for each language pair, {\tt 1M} sentences;
+  \item each language of a pair has one monolingual corpora, {\tt 1M} sentences;
   \item a small parallel corpus, {\tt 50K} sentence pairs;
   \item and an input corpus to be translated from source to target language, {\tt 6K} sentences.
 \end{itemize}
@@ -69,14 +76,14 @@ The machine translation system could be built as a fully supervised one, though 
 Our solutions followed the fully supervised and fully unsupervised approaches only.
 
 Given the problem at hand, the paper devises a number of baseline approaches and then compare them to the unsupervised model described above.
-Section~\ref{sect:baselines} will outline the baselines which were used to benchmark the unsupervised NMT in the oblivious setup.
-In Section~\ref{sect:unmt} we discuss the experiments with the unsupervised NMT model for the oblivious setup.
-Finally, in Section~\ref{sect:nonoblivious} we investigate whether prior knowledge of a language pair gives an advantage for the unsupervised NMT approach.
+Section~\ref{sect:baseline} will outline the baselines which were used to benchmark the unsupervised \ac{NMT} in the oblivious setup.
+In Section~\ref{sect:unmt} we discuss the experiments with the unsupervised \ac{NMT} model for the oblivious setup.
+Finally, in Section~\ref{sect:nonoblivious} we investigate whether prior knowledge of a language pair gives an advantage for the unsupervised \ac{NMT} approach.
 
-\section{Baselines}
-\label{sect:baselines}
+\section{Baseline}
+\label{sect:baseline}
 
-A supervised NMT model~\footnote{For a full description of the Encoder-Decoder architecture see \url{https://github.com/aoboturov/loresmt-nlprocessing\#supervised-model-description}.} was chosen for the baseline.
+A supervised \ac{NMT} model~\footnote{For a full description of the Encoder-Decoder architecture see \url{https://github.com/aoboturov/loresmt-nlprocessing\#supervised-model-description}.} was chosen for the baseline.
 The model was implemented in OpenNMT~\citep{opennmt} and had the following Encoder-Decoder architecture:
 \begin{itemize}
 \item encoder is a continuous embedding from the source language to a $300$ dimensional space;
@@ -84,45 +91,41 @@ The model was implemented in OpenNMT~\citep{opennmt} and had the following Encod
 \item the decoder has a stacked LSTM with a dropout, a global attention \citep{luong2015effective} and a continuous embedding from a $300$ dimensional space.
 \end{itemize}
 
-All those models were trained only on a {\tt 50K} parallel corpus with a {\tt 5\%} validation set.
+For each language pair a model was trained only on a {\tt 50K} parallel corpus with a {\tt 5\%} validation set.
 Training on a NVIDIA Titan XP GPU usually lasted $20$ to $30$ minutes.
-The results are provided in Table~\ref{table:baselines}.
-Another baseline which is reported here is an input to output copy which is reported as the {\tt no-Epochs} baseline.
+The results are provided in Table~\ref{table:results}.
 Additionally, embeddings were trained with Fasttext~\citep{bojanowski2016enriching}.
 
 \begin{table}
 \begin{center}
-\begin{tabular}{ l c c c }
-Pair & Epochs & Oblivious Score & Conscious Score \\
+\begin{tabular}{ l l c }
+Pair & Model & Score \\
 \hline
-\multirow{5}{4em}{En-Ru} & - & 0.02123 & - \\
-& 1 & 0.10783 & \\
-& 5 & 0.25747 & \\
-& 10 & 0.28915 & \\
-& Best & -  & 0.298 \\
+\multirow{3}{4em}{En-Ru} & In to Out Copy & 0.02123 \\
+& Supervized, 10 Epochs & 0.28915 \\
+& Literature Best & 0.298 \\
 \hline
-\multirow{5}{4em}{Lv-En} & - & 0.02075 & - \\
-& 1 & 0.01142 & \\
-& 5 & 0.04766 & \\
-& 10 & 0.05756 & \\
-& Best & - & 0.229 \\
+\multirow{4}{4em}{Lv-En} & UNMT & 0.00428 \\
+& In to Out Copy & 0.02075 \\
+& Supervized, 10 Epochs & 0.05756 \\
+& Literature Best & 0.229 \\
 \hline
-\multirow{5}{4em}{En-Ko} & - & 0.02759 & - \\
-& 1 & 0.11179 & \\
-& 5 & 0.22945 & \\
-& 10 & 0.25418 & \\
-& Best & - & 0.2795
+\multirow{5}{4em}{En-Ko} & In to Out Copy & 0.02759 \\
+& UNMT & 0.03632 \\
+& Supervized, 10 Epochs & 0.25418 \\
+& Literature Best & 0.2795 \\
+& Competition Best & 0.30074
 \end{tabular}
 \end{center}
-\caption{Supervised NMT baselines, measured in BLEU scores.}
+\caption{Evaluation results for models, measured in BLEU scores.}
 \caption*{\small
 The best {\tt Lv-En} and  {\tt En-Ru} are reported on newstest2017 corpora in \cite{bojar2017findings}.
 % Lv-En \url{http://matrix.statmt.org/matrix/output/1872?score_id=22981}
 %\url{http://matrix.statmt.org/matrix/output/1875?score_id=21229}
 {\tt En-Ko} is reported after \cite{junczys2016coppa} which uses COPPA corpus.
-{\tt Best} here provides an indicative upper boundary on what an MT system trained on a generic parallel corpus might score on a translation task.
+{\tt Literature Best} here provides an indicative upper boundary on what an \acf{MT} system trained on a generic parallel corpus might score on a translation task.
 }
-\label{table:baselines}
+\label{table:results}
 \end{table}
 
 On the {\tt Lv-En} langauge pair model performance was mediocre.
@@ -132,35 +135,38 @@ It could be explained by the fact that {\tt En-Ru} and {\tt En-Ko} were topic-re
 \label{sect:unmt}
 
 Competition included not only parallel corpus for each language pair but  {\tt 1M} monolingual corpus for each language.
-One way to leverage this data is to use unsupervised NMT model described in \cite{DBLP:journals/corr/abs-1711-00043}.
+One way to leverage this data is to use unsupervised \ac{NMT} model described in \cite{DBLP:journals/corr/abs-1711-00043}.
 The code for this model is not available, so we built our own implementation~\footnote{\url{https://github.com/IlyaGusev/UNMT}} based on PyTorch framework. 
 
 Our system can be used in several ways.
-First, one can use it like an ordinary supervised NMT system.
+First, one can use it like an ordinary supervised \ac{NMT} system.
 Second, it can work as a denoising autoencoder.
 Finally, one can train this model on monolingual corpora using a predefined zero model.
+There are two types of zero models which we have used: dictionary translation and a supervised model trained on a small corpora.
+In any case, given a zero model, \ac{UNMT}~\footnote{The \ac{UNMT} model used for translation is described in \url{https://github.com/aoboturov/loresmt-nlprocessing\#unmt-model-description}} would train iteratively using adversarial training~\citep{goodfellow2016nips} with a discriminator~\footnote{The Discriminator description is available online \url{https://github.com/aoboturov/loresmt-nlprocessing\#unmt-discriminator-description}}.
+The translation model is an RNN Encoder-Decoder architecture \citep{DBLP:journals/corr/ChoMGBSB14} with continuous embeddings and a global attention \citep{luong2015effective}.
 
-There are several types of zero models:
-\begin{itemize}
-\item word by word model;
-\item supervised model trained on a small corpora;
-\item unsupervised model from the previous step.
-\end{itemize}
+\subsection{\ac{UNMT} with a dictionary translation zero model}
+The dictionary translation model is a translation process which uses a dictionary obtained with an unsupervised embedding~\citep{conneau2017word} (or otherwise an external dictionary could have been used if the language pair was known) to translate each sentence word by word.
 
-In any case, given a zero model, UNMT~\footnote{The UNMT model used for translation is described in \url{https://github.com/aoboturov/loresmt-nlprocessing\#unmt-model-description}} would train iteratively using adversarial training~\citep{goodfellow2016nips} with a discriminator~\footnote{The Discriminator description is available online \url{https://github.com/aoboturov/loresmt-nlprocessing\#unmt-discriminator-description}}.
+To debug the zero model we first check the input to output copy which is reported in Table~\ref{table:results} as the {\tt In to Out Copy} result.
+Normally, we would expect an improvement over the {\tt In to Out Copy}, because it is closely related to dictionary translation: words which are not in the dictionary would be copied over from source to target sentences.
 
-System showed good results in first two tasks, but failed in the last one.
-We don't know whether there is an error in our system or the corpora are too small.
+\todo{ao}{Run word-by-word separately to see the impact}
+
+We do not know whether there is an error in our system or the corpora are too small.
 BLEU scores on all language pairs were below {\tt 0.01 BLEU}.
-Overall it has an RNN Encoder-Decoder architecture \citep{DBLP:journals/corr/ChoMGBSB14} with continuous embeddings and a global attention \citep{luong2015effective}.
+
+\subsection{\ac{UNMT} with a supervised model trained on a small corpora}
+\todo{ao}{update this section with the results I have obtained myself running the simulations}
 
 \section{Prior Language Pair Information}
 \label{sect:nonoblivious}
 
 Competition was structured in a way to prevent participants from knowing what language pairs were being tested.
 The Hackathon could have had any pair-combination of $42$ languages supported by {{Booking.com}}, so the total number of models (if trained undirectionally) would have been over $1500$.
-Given that even for our simplest baseline model, an individual NMT model is at least $300$~Megabytes, we would have had to train individual unidirectional models (likely multiple days) on some external parallel data (which we did not have for all language pairs) and package around half a Terabyte of data inside a docker container (which is technologically unrealistic).
-We could have followed Google's NMT approach~\citep{johnson2016google} or any other NMT approach, which have an intermediate neural representation, to reduce the total number of models to just one, but it still should have been trained on external parallel corpora (even if they all would be just English to any other of the $41$ languages).
+Given that even for our simplest baseline model, an individual \ac{NMT} model is at least $300$~Megabytes, we would have had to train individual unidirectional models (likely multiple days) on some external parallel data (which we did not have for all language pairs) and package around half a Terabyte of data inside a docker container (which is technologically unrealistic).
+We could have followed Google's \ac{NMT} approach~\citep{johnson2016google} or any other \ac{MT} approach, which have an intermediate neural representation, to reduce the total number of models to just one, but it still should have been trained on external parallel corpora (even if they all would be just English to any other of the $41$ languages).
 To reduce the combinatorial complexity of the problem, one could somehow identify the language pair and then just train a single unidirectional model.
 Competition testing system prevented access to any external resources and remote calls during training and inference phases.
 The sheer size of models representations, the total training time, amount and diversity of training data and technical constraints would make pre-training a non-viable option.
@@ -190,7 +196,7 @@ A set of all languages identifiable by the routine could be searched in log-time
 \subsection{Would Prior Knowledge Matter?}
 \label{sect:prior}
 
-In Table~\ref{table:baselines} we also report the best BLEU scores available within the conference submissions for each of the pairs trained on common corpora.
+In Table~\ref{table:results} we also report the best BLEU scores available within the conference submissions for each of the pairs trained on common corpora.
 
 We could see that a margin of improvement is just a couple of BLEU points for {\tt En-Ru} and {\tt En-Ko} pairs.
 On the other hand, {\tt Lv-En} has a very poor result and we would expect that both unsupervised learning and prior knowledge would improve this score.
@@ -202,8 +208,8 @@ On the other hand, {\tt Lv-En} has a very poor result and we would expect that b
 
 A generic fully unsupervised machine translation problem is hard.
 In some cases, one could obtain good machine translation models by having a small data set for a limited domain, e.g. for a case of travelling destinations or some other domain-specific translation.
-Although semi-supervised translation might improve the results, we have not observed that a fully supervised model used as the zero model for the UNMT made any translation improvement over a regular supervised model.
-Poor performance of the UNMT has to be investigated further, possibly by providing larger non-parallel corpora and changing UNMT model architecture.
+Although semi-supervised translation might improve the results, we have not observed that a fully supervised model used as the zero model for the \ac{UNMT} made any translation improvement over a regular supervised model.
+Poor performance of the \ac{UNMT} has to be investigated further, possibly by providing larger non-parallel corpora and changing \ac{UNMT} model architecture.
 
 \section{Data availability and reproducibility}
 \label{sect:data}
@@ -217,6 +223,7 @@ Table~\ref{table:corpora_stats} describes statistics for the corpora.
 \begin{center}
 \begin{tabular}{ l c c c c }
 Pair & Source Tokens & Source Words & Target Tokens & Target Words \\
+\hline
 En-Ru & 14M & 165519 & 19M & 345444 \\
 Lv-En & 21M & 502858 & 24M & 341012 \\
 En-Ko & 14M & 157649 & 7M & 530124 \\
