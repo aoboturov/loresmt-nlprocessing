@@ -261,3 +261,6 @@ because of corpus size.
 If the paper is reporting a strongly negative result, this should, if possible,
 be made clear in the abstract or the introduction; it is not immediately
 obvious that this is the case.
+
+### Response
++ Regarding the language identification - we have expanded introduction to the section `Prior Language Pair Information` to explain that the sheer size of models representations, total training time and amount and diversity of training data would make pre-training a non-viable option.

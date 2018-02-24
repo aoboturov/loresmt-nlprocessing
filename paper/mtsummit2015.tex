@@ -158,6 +158,13 @@ Overall it has an RNN Encoder-Decoder architecture \citep{DBLP:journals/corr/Cho
 \label{sect:nonoblivious}
 
 Competition was structured in a way to prevent participants from knowing what language pairs were being tested.
+The Hackathon could have had any pair-combination of $42$ languages supported by {{Booking.com}}, so the total number of models (if trained undirectionally) would have been over $1500$.
+Given that even for our simplest baseline model, an individual NMT model is at least $300$~Megabytes, we would have had to train individual unidirectional models (likely multiple days) on some external parallel data (which we did not have for all language pairs) and package around half a Terabyte of data inside a docker container (which is technologically unrealistic).
+We could have followed Google's NMT approach~\citep{johnson2016google} or any other NMT approach, which have an intermediate neural representation, to reduce the total number of models to just one, but it still should have been trained on external parallel corpora (even if they all would be just English to any other of the $41$ languages).
+To reduce the combinatorial complexity of the problem, one could somehow identify the language pair and then just train a single unidirectional model.
+Competition testing system prevented access to any external resources and remote calls during training and inference phases.
+The sheer size of models representations, the total training time, amount and diversity of training data and technical constraints would make pre-training a non-viable option.
+
 The only information available to participants was the BLEU score and the failure or success status for the submission.
 One could devise at least two attacks to identify the language pair and then using this prior knowledge, use it to consturct a better translation algorithm.
 
