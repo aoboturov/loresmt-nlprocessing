@@ -235,6 +235,20 @@ No link to the leaderboard.
 
 Due to this, I'm giving the paper a rating 2.
 
+### Response
++ The intro and data availability and reproducibility sections were reorganized into a Competition Setup section.
++ A link to the leaderboard was provided in a footnote to Competition Setup section.
++ PyTorch was cited as suggested in https://github.com/pytorch/pytorch/issues/4126.
++ The acronyms were explained at the place of first usage.
++ Word by word model is in fact just a dictionary translation, we have changed the explanation there.
++ Zero model is explain in the context of a training epoch for unsupervised model - it would be an initialization for the first epoch.
++ Result for both supervised, semi-supervised and unsupervised models were provided throughout the article, we had regrouped them in Table 2.
++ Fixed table references.
+
+### TODO
+- No related work section.
+- Although appendix provides more detail information about system architecture, it's hard to understand. Scheme or figure would be much easy understandable.
+
 ## REVIEWER \#6
 ---------------------------------------------------------------------------
 Reviewer's Scores
@@ -275,3 +289,7 @@ obvious that this is the case.
 
 ### Response
 + Regarding the language identification - we have expanded introduction to the section `Prior Language Pair Information` to explain that the sheer size of models representations, total training time and amount and diversity of training data would make pre-training a non-viable option.
+
+### TODO
+- Explain why we had a strongly negative result for the NMT.
+- Explain our attempts to debug the UNMT.

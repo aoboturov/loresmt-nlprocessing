@@ -15,6 +15,8 @@
 \usepackage[utf8]{inputenc}
 \usepackage[english]{babel}
 \usepackage[nolist,nohyperlinks]{acronym}
+\usepackage{textcomp}
+\usetikzlibrary{shapes,arrows}
 
 \newcommand{\confname}{AMTA 2018}
 \newcommand{\website}{\protect\url{https://sites.google.com/view/loresmt/}}
@@ -49,28 +51,43 @@
 \pagestyle{empty}
 
 \begin{abstract}
-  A comparison of supervised and unsupervised \ac{NMT} models was done for the corpora provided by the DeepHack.Babel competition.
+  A comparison~\footnote{Images used to train models are publicly available at \url{https://github.com/aoboturov/loresmt-nlprocessing}} of supervised and unsupervised \ac{NMT} models was done for the corpora provided by the DeepHack.Babel competition.
   It is shown that for even small parallel corpus, fully supervised \ac{NMT} gives better results than fully unsupervised for the case of constrained domain of the corpus.
   We have also implemented a recent fully unsupervised \ac{NMT} model which has given good final results.
 \end{abstract}
 
-\section{Introduction}
-\label{sect:intro}
+\section{Competition Setup}
+\label{sect:setup}
 
-We present results obtained by the "NL~Processing" team during the DeepHack.Babel hackathon~\footnote{\url{http://babel.tilda.ws/}} on semi-supervised machine translation.
+We present results obtained by the "NL~Processing" team during the DeepHack.Babel hackathon~\footnote{The leaderboard: \url{http://contest.deephack.me/c/babel/leaderboard}} on semi-supervised machine translation.
 Organizers of the competition created an oblivious setup - a case in which the source and target languages are not known and the machine translation system can be trained with no specific tuning to the language pair.
 The scoring system would run training and then run translation with the trained model.
 Participants have no insight into the process and could only observe the final score for a submission and/or the failure status.
 Submissions were scored in BLEU-4~\citep{papineni2002bleu}.
 
-For each language pair the following datasets~\footnote{\url{http://contest.deephack.me/c/babel/overview}} were available:
+For each language pair the following datasets~\footnote{Contest overview: \url{http://contest.deephack.me/c/babel/overview}} were available:
 \begin{itemize}
   \item each language of a pair has one monolingual corpora, {\tt 1M} sentences;
   \item a small parallel corpus, {\tt 50K} sentence pairs;
   \item and an input corpus to be translated from source to target language, {\tt 6K} sentences.
 \end{itemize}
 There were 3 language pairs used during the competition: {\tt En-Ru} for test, {\tt Lv-En} for qualification and {\tt En-Ko} for final scoring.
-More information about corpora is available in Section~\ref{sect:data}.
+Data for training and test are not available publicly and organizers would not release them.
+Therefore we could only provide a summary~\footnote{Samples from the parallel corpora are provided online \url{https://github.com/aoboturov/loresmt-nlprocessing\#the-corpora-extracts}}: Table~\ref{table:corpora_stats} describes statistics for the corpora.
+
+\begin{table}[h!]
+\begin{center}
+\begin{tabular}{ l c c c c }
+Pair & Source Tokens & Source Words & Target Tokens & Target Words \\
+\hline
+En-Ru & 14M & 165519 & 19M & 345444 \\
+Lv-En & 21M & 502858 & 24M & 341012 \\
+En-Ko & 14M & 157649 & 7M & 530124 \\
+\end{tabular}
+\end{center}
+\caption{Descriptive statistics for the corpora.}
+\label{table:corpora_stats}
+\end{table}
 
 The machine translation system could be built as a fully supervised one, though the parallel corpus is small ({\tt 50K}); as an unsupervised one, using the two monolingual corpora; and as a semi-supervised one.
 Our solutions followed the fully supervised and fully unsupervised approaches only.
@@ -98,23 +115,15 @@ Additionally, embeddings were trained with Fasttext~\citep{bojanowski2016enrichi
 
 \begin{table}
 \begin{center}
-\begin{tabular}{ l l c }
-Pair & Model & Score \\
+\begin{tabular}{ l c c c }
+Model & En-Ru Score & Lv-En Score & En-Ko Score \\
 \hline
-\multirow{3}{4em}{En-Ru} & In to Out Copy & 0.02123 \\
-& Supervized, 10 Epochs & 0.28915 \\
-& Literature Best & 0.298 \\
-\hline
-\multirow{4}{4em}{Lv-En} & UNMT & 0.00428 \\
-& In to Out Copy & 0.02075 \\
-& Supervized, 10 Epochs & 0.05756 \\
-& Literature Best & 0.229 \\
-\hline
-\multirow{5}{4em}{En-Ko} & In to Out Copy & 0.02759 \\
-& UNMT & 0.03632 \\
-& Supervized, 10 Epochs & 0.25418 \\
-& Literature Best & 0.2795 \\
-& Competition Best & 0.30074
+Supervized, 10 Epochs & 0.28915 & 0.05756 & 0.25418 \\
+In to Out Copy & 0.02123 & 0.02075 & 0.02759 \\
+Unsupervised UNMT & - & 0.00428 & - \\
+Semi-supervised UNMT & - & - & 0.03632 \\
+Literature Best, generic & 0.298 & 0.229 & 0.2795 \\
+Competitors Best & - & - & 0.30074
 \end{tabular}
 \end{center}
 \caption{Evaluation results for models, measured in BLEU scores.}
@@ -134,19 +143,36 @@ It could be explained by the fact that {\tt En-Ru} and {\tt En-Ko} were topic-re
 \section{Unsupervised Neural Machine Translation}
 \label{sect:unmt}
 
-Competition included not only parallel corpus for each language pair but  {\tt 1M} monolingual corpus for each language.
+Competition included not only parallel corpus for each language pair, but also {\tt 1M} monolingual corpus for each language.
 One way to leverage this data is to use unsupervised \ac{NMT} model described in \cite{DBLP:journals/corr/abs-1711-00043}.
-The code for this model is not available, so we built our own implementation~\footnote{\url{https://github.com/IlyaGusev/UNMT}} based on PyTorch framework. 
-
+The code for this model is not available, so we built our own implementation~\footnote{Implementation of the \acs{UNMT}: \url{https://github.com/IlyaGusev/UNMT}} based on PyTorch~\citep{paszke2017automatic} framework. 
 Our system can be used in several ways.
 First, one can use it like an ordinary supervised \ac{NMT} system.
 Second, it can work as a denoising autoencoder.
-Finally, one can train this model on monolingual corpora using a predefined zero model.
+Finally, one can train this model on monolingual corpora using a predefined initial model which we call the zero model.
+The goal of the competition was to find unsupervised and semi-supervised \ac{MT} methods applicable in practice.
+The supervised case was already covered in Section~\ref{sect:baseline}.
+A fully unsupervised case is covered in Section~\ref{sect:fully_unsupervised}, while a semi-supervised approach is described in Section~\ref{sect:semi_unsupervised}.
+
+The \ac{UNMT}~\footnote{The \ac{UNMT} model used for translation is described in \url{https://github.com/aoboturov/loresmt-nlprocessing\#unmt-model-description}} would train iteratively using adversarial training~\citep{goodfellow2016nips} with a discriminator~\footnote{The Discriminator description is available online \url{https://github.com/aoboturov/loresmt-nlprocessing\#unmt-discriminator-description}}.
+In both semi-supervised and unsupervised cases we run an unsupervised training epoch which starts from a batch of sentences translated by a model from a previous iteration of unsupervised training (or zero model if it is the first iteration) followed by a noising layer and a pass through the model which is trained on the current iteration.
+Figure~\ref{fig:unsupervised_training} gives a graphical explanation of the training process.
+
+\begin{figure}
+\begin{tikzpicture}[auto, thick, node distance=2cm, >=triangle 45]
+\draw;
+
+\end{tikzpicture}
+\caption{Unsupervised epoch training for the \ac{UNMT} model.}
+\label{fig:unsupervised_training}
+\todo[inline]{ao}{Diagram from Figure 2 bottom of the UNMT paper}
+\end{figure}
+
 There are two types of zero models which we have used: dictionary translation and a supervised model trained on a small corpora.
-In any case, given a zero model, \ac{UNMT}~\footnote{The \ac{UNMT} model used for translation is described in \url{https://github.com/aoboturov/loresmt-nlprocessing\#unmt-model-description}} would train iteratively using adversarial training~\citep{goodfellow2016nips} with a discriminator~\footnote{The Discriminator description is available online \url{https://github.com/aoboturov/loresmt-nlprocessing\#unmt-discriminator-description}}.
-The translation model is an RNN Encoder-Decoder architecture \citep{DBLP:journals/corr/ChoMGBSB14} with continuous embeddings and a global attention \citep{luong2015effective}.
+The translation model has an RNN Encoder-Decoder architecture \citep{DBLP:journals/corr/ChoMGBSB14} with continuous embeddings and a global attention \citep{luong2015effective}.
 
 \subsection{\ac{UNMT} with a dictionary translation zero model}
+\label{sect:fully_unsupervised}
 The dictionary translation model is a translation process which uses a dictionary obtained with an unsupervised embedding~\citep{conneau2017word} (or otherwise an external dictionary could have been used if the language pair was known) to translate each sentence word by word.
 
 To debug the zero model we first check the input to output copy which is reported in Table~\ref{table:results} as the {\tt In to Out Copy} result.
@@ -158,6 +184,7 @@ We do not know whether there is an error in our system or the corpora are too sm
 BLEU scores on all language pairs were below {\tt 0.01 BLEU}.
 
 \subsection{\ac{UNMT} with a supervised model trained on a small corpora}
+\label{sect:semi_unsupervised}
 \todo{ao}{update this section with the results I have obtained myself running the simulations}
 
 \section{Prior Language Pair Information}
@@ -210,32 +237,6 @@ A generic fully unsupervised machine translation problem is hard.
 In some cases, one could obtain good machine translation models by having a small data set for a limited domain, e.g. for a case of travelling destinations or some other domain-specific translation.
 Although semi-supervised translation might improve the results, we have not observed that a fully supervised model used as the zero model for the \ac{UNMT} made any translation improvement over a regular supervised model.
 Poor performance of the \ac{UNMT} has to be investigated further, possibly by providing larger non-parallel corpora and changing \ac{UNMT} model architecture.
-
-\section{Data availability and reproducibility}
-\label{sect:data}
-
-Data for training and test are not available publicly and organizers would not release them.
-Datasets were already summarized in Section~\ref{sect:intro}.
-
-Table~\ref{table:corpora_stats} describes statistics for the corpora.
-
-\begin{table}[h!]
-\begin{center}
-\begin{tabular}{ l c c c c }
-Pair & Source Tokens & Source Words & Target Tokens & Target Words \\
-\hline
-En-Ru & 14M & 165519 & 19M & 345444 \\
-Lv-En & 21M & 502858 & 24M & 341012 \\
-En-Ko & 14M & 157649 & 7M & 530124 \\
-\end{tabular}
-\end{center}
-\caption{Descriptive statistics for the corpora.}
-\label{table:corpora_stats}
-\end{table}
-
-Samples from the parallel corpora are provided online \url{https://github.com/aoboturov/loresmt-nlprocessing\#the-corpora-extracts}
-
-Images used to train models are publicly available at \url{https://github.com/aoboturov/loresmt-nlprocessing}.
 
 \small
 
