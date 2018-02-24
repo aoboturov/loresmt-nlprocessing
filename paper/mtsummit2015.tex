@@ -12,9 +12,8 @@
 \usepackage{listings}
 \usepackage{color}
 \usepackage{caption}
-\usepackage{CJKutf8}
 \usepackage[utf8]{inputenc}
-\usepackage[russian,english]{babel}
+\usepackage[english]{babel}
 
 \newcommand{\confname}{AMTA 2018}
 \newcommand{\website}{\protect\url{https://sites.google.com/view/loresmt/}}
@@ -32,7 +31,7 @@
 \begin{document}
 
 % \mtsummitHeader{x}{x}{xxx-xxx}{2015}{45-character paper description goes here}{Author(s) initials and last name go here}
-\title{\bf Would Unsupervised NMT Improve over Supervised NMT for the Case of Low Resource Languages on a Constrained Domain Corpus?}
+\title{\bf System description of Supervised and Unsupervised NMT approaches from {NL~Processing} team at DeepHack.Babel task}
 \author{\name{\bf Ilya Gusev} \hfill  \addr{ilya.gusev@phystech.edu}\\
         \addr{MIPT, Dolgoprudny, Moscow Region, 141701, Russian Federation}
 \AND
@@ -77,14 +76,13 @@ Finally, in Section~\ref{sect:nonoblivious} we investigate whether prior knowled
 \section{Baselines}
 \label{sect:baselines}
 
-A supervised NMT model was chosen for the baseline.
+A supervised NMT model~\footnote{For a full description of the Encoder-Decoder architecture see \url{https://github.com/aoboturov/loresmt-nlprocessing\#supervised-model-description}.} was chosen for the baseline.
 The model was implemented in OpenNMT~\citep{opennmt} and had the following Encoder-Decoder architecture:
 \begin{itemize}
 \item encoder is a continuous embedding from the source language to a $300$ dimensional space;
 \item followed by a $3$-layers LSTM with a dropout;
 \item the decoder has a stacked LSTM with a dropout, a global attention \citep{luong2015effective} and a continuous embedding from a $300$ dimensional space.
 \end{itemize}
-For a full description of the Encoder-Decoder architecture see Appendix~\ref{appendix:supervised}.
 
 All those models were trained only on a {\tt 50K} parallel corpus with a {\tt 5\%} validation set.
 Training on a NVIDIA Titan XP GPU usually lasted $20$ to $30$ minutes.
@@ -149,12 +147,11 @@ There are several types of zero models:
 \item unsupervised model from the previous step.
 \end{itemize}
 
-In any case, given a zero model, UNMT would train iteratively using adversarial training~\citep{goodfellow2016nips} with a discriminator described in Appendix~\ref{appendix:discriminator}.
+In any case, given a zero model, UNMT~\footnote{The UNMT model used for translation is described in \url{https://github.com/aoboturov/loresmt-nlprocessing\#unmt-model-description}} would train iteratively using adversarial training~\citep{goodfellow2016nips} with a discriminator~\footnote{The Discriminator description is available online \url{https://github.com/aoboturov/loresmt-nlprocessing\#unmt-discriminator-description}}.
 
 System showed good results in first two tasks, but failed in the last one.
 We don't know whether there is an error in our system or the corpora are too small.
 BLEU scores on all language pairs were below {\tt 0.01 BLEU}.
-The NMT model used for translation is described in Appendix~\ref{appendix:unsupervised}.
 Overall it has an RNN Encoder-Decoder architecture \citep{DBLP:journals/corr/ChoMGBSB14} with continuous embeddings and a global attention \citep{luong2015effective}.
 
 \section{Prior Language Pair Information}
@@ -165,47 +162,6 @@ The only information available to participants was the BLEU score and the failur
 One could devise at least two attacks to identify the language pair and then using this prior knowledge, use it to consturct a better translation algorithm.
 
 First we will explore the nature of those attacks and then measure what might be an impact of such knowledge.
-
-\begin{table}[h!]
-\begin{center}
-\begin{tabular}{ l p{10cm} }
-Pair & Sentences \\
-\hline
-\multirow{2}{4em}{En-Ru}
-& Nieuwmarkt as well as Kalverstraat, Hermitage and Rembrandtplein are within 15 minutes walking. \\
-& \begin{otherlanguage*}{russian}
-До площади Ниумаркт, торговой улицы Калверштрат, музея Эрмитаж на Амстеле и площади Рембрандта можно дойти менее чем за 15 минут.
-\end{otherlanguage*} \\
-\hline
-\multirow{2}{4em}{En-Ru}
-& The Danube Delta is a natural reserve where you can go fishing, bird watching, take boat rides or simply unwind surrounded by nature. \\
-& \begin{otherlanguage*}{russian}
-Дельта Дуная является природным заповедником, в котором можно заняться рыбной ловлей, понаблюдать за птицами, покататься на лодке или просто расслабиться в окружении природы. \end{otherlanguage*} \\
-\hline
-\multirow{2}{4em}{Lv-En}
-& Vienīgais pētījums, kurā Latvija tikusi kritizēta, saņemts no starptautisko aizdevēju (viens no tiem Eiropas Komisija) pēcprogrammas uzraudzības misijas. \\
-& The only survey that had Latvia criticized came from the post-supervisory mission of international creditors. \\
-\hline
-\multirow{2}{4em}{Lv-En}
-& Es nezinu visas detaļas, bet par tām, kurām zinu, man šķiet, ka visam jābeidzas labi. \\
-& I don’t know all the details, but facts I do know make me believe everything will be alright. \\
-\hline
-\multirow{2}{4em}{En-Ko}
-& Free wired internet, an LCD TV and an en suite bathroom are included in this air-conditioned room. \\
-& \begin{CJK}{UTF8}{mj}
-  이 객실은 무료 유선 인터넷, LCD TV, 실내 욕실과 에어컨을 갖추고 있습니다.
-  \end{CJK} \\
-\hline
-\multirow{2}{4em}{En-Ko}
-& Air-conditioned room with heating and features a hairdryer and towels. \\
-& \begin{CJK}{UTF8}{mj}
-  에어컨과 난방 시설이 완비된 이 객실에는 헤어드라이어와 수건이 비치되어 있습니다.
-  \end{CJK}
-\end{tabular}
-\end{center}
-\caption{Examples of sentences from parallel corpora for all language pairs.}
-\label{table:corpora_examples}
-\end{table}
 
 \subsection{Side-Channel Attacks against the Language Pair}
 \label{sect:attack}
@@ -263,7 +219,7 @@ En-Ko & 14M & 157649 & 7M & 530124 \\
 \label{table:corpora_stats}
 \end{table}
 
-In Table~\ref{table:corpora_examples} we provide a sample of sentences from parallel corpora.
+Samples from the parallel corpora are provided online \url{https://github.com/aoboturov/loresmt-nlprocessing\#the-corpora-extracts}
 
 Images used to train models are publicly available at \url{https://github.com/aoboturov/loresmt-nlprocessing}.
 
@@ -271,21 +227,6 @@ Images used to train models are publicly available at \url{https://github.com/ao
 
 \bibliographystyle{apalike}
 \bibliography{mtsummit2015}
-
-\begin{appendices}
-\section{Supervised NMT Model}
-\label{appendix:supervised}
-\lstinputlisting{supervised-model.txt}
-
-\section{Unsupervised NMT Model}
-\label{appendix:unsupervised}
-\lstinputlisting{unsupervised-model.txt}
-
-\section{Discriminator for the Adversarial training of the UNMT Model}
-\label{appendix:discriminator}
-\lstinputlisting{discriminator-model.txt}
-
-\end{appendices}
 
 \end{document}
 
