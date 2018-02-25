@@ -6,17 +6,18 @@
 \usepackage{latexsym}
 \usepackage{natbib}
 \usepackage{layout}
-\usepackage{multirow}
 \usepackage[dvipsnames]{xcolor}  % Coloured text etc.
 \usepackage[colorinlistoftodos,prependcaption,textsize=tiny]{todonotes}
-\usepackage{listings}
 \usepackage{color}
 \usepackage{caption}
 \usepackage[utf8]{inputenc}
 \usepackage[english]{babel}
 \usepackage[nolist,nohyperlinks]{acronym}
-\usepackage{textcomp}
-\usetikzlibrary{shapes,arrows}
+\usepackage{graphicx}
+\usepackage{caption}
+\usepackage{subcaption}
+
+\graphicspath{ {images/} }
 
 \newcommand{\confname}{AMTA 2018}
 \newcommand{\website}{\protect\url{https://sites.google.com/view/loresmt/}}
@@ -129,7 +130,7 @@ The model was implemented in OpenNMT~\citep{opennmt} and had the following Encod
 \end{itemize}
 
 For each language pair a model was trained only on a {\tt 50K} parallel corpus with a {\tt 5\%} validation set.
-Data (except for Korean) were lowercased and tokenized with Moses~\citep{koehn2007moses}.
+Data were lowercased and tokenized with Moses~\citep{koehn2007moses}.
 Training on an NVIDIA Titan XP GPU usually lasted for $20$ to $30$ minutes, the results of which are provided in Table~\ref{table:results}.
 Additionally, embeddings were trained with Fasttext~\citep{bojanowski2016enriching}.
 We have a number of different combinations of \acs{LSTM} depths and cell-sizes, but we did not search for optimal hyper parameters for the supervised baseline.
@@ -150,39 +151,62 @@ One can train this model on monolingual corpora using a predefined initial model
 The goal of the competition was to find unsupervised and semi-supervised \ac{MT} methods applicable in practice.
 A fully unsupervised case is covered in Section~\ref{sect:fully_unsupervised}, while a semi-supervised approach is described in Section~\ref{sect:semi_unsupervised}.
 
-The \ac{UNMT}~\footnote{The \ac{UNMT} model used for translation is described in \url{https://github.com/aoboturov/loresmt-nlprocessing\#unmt-model-description}} would train iteratively using adversarial training~\citep{goodfellow2016nips} with a discriminator~\footnote{The Discriminator description is available online \url{https://github.com/aoboturov/loresmt-nlprocessing\#unmt-discriminator-description}}.
+The \ac{UNMT}~\footnote{The \ac{UNMT} model used for translation is described in \url{https://github.com/aoboturov/loresmt-nlprocessing\#unmt-model-description}} would train iteratively using adversarial training~\citep{goodfellow2016nips} with a discriminator~\footnote{The Discriminator description is available online \url{https://github.com/aoboturov/loresmt-nlprocessing\#unmt-discriminator-description}} presented in Figure~\ref{fig:discriminator}.
 In both the semi-supervised and unsupervised cases we ran an unsupervised training epoch which starts from a batch of sentences translated by a model from a previous iteration of unsupervised training (or zero model if it is the first iteration) followed by a noising layer and a pass through the model that has been trained on the current iteration.
 The preprocessing was done with Moses~\citep{koehn2007moses}: data were lowercased and tokenized (except for Korean).
 Figure~\ref{fig:unsupervised_training} gives a graphical explanation of the training process.
 
 \begin{figure}
-\begin{tikzpicture}[auto, thick, node distance=2cm, >=triangle 45]
-\draw;
-
-\end{tikzpicture}
-\caption{Unsupervised epoch training for the \ac{UNMT} model.}
-\label{fig:unsupervised_training}
-\todo[inline]{ao}{Diagram from Figure 2 bottom of the UNMT paper}
+\centering
+% The \hfill (between \end{subfigure} and \begin{subfigure} or minipage) is really important; not suppressing it will cause a spurious blank space to be added, the total length will surpass \textwidth and the figures will end up not side-by-side.
+\begin{minipage}{.4\textwidth}
+  \centering
+  \includegraphics[width=.8\linewidth]{discriminator.png}
+  \captionof{figure}{Adversarial training discriminator.}
+  \label{fig:discriminator}
+\end{minipage}\hfill
+\begin{minipage}{.6\textwidth}
+  \centering
+  \includegraphics[width=\linewidth]{unmt.png}
+  \captionof{figure}{\ac{UNMT} training process.}
+  \label{fig:unsupervised_training}
+\end{minipage}
 \end{figure}
 
 There are two types of zero models which we have used: dictionary translation, and a supervised model trained on a small corpora.
-The translation model has an RNN Encoder-Decoder architecture \citep{DBLP:journals/corr/ChoMGBSB14} with continuous embeddings and a global attention \citep{luong2015effective}.
+The translation model has an RNN Encoder-Decoder architecture \citep{DBLP:journals/corr/ChoMGBSB14} with word embeddings and a global attention \citep{luong2015effective}.
+Figure~\ref{fig:encoder} depicts the encoder and Figure~\ref{fig:decoder} presents the decoder.
+
+\begin{figure}
+\centering
+% The \hfill (between \end{subfigure} and \begin{subfigure} or minipage) is really important; not suppressing it will cause a spurious blank space to be added, the total length will surpass \textwidth and the figures will end up not side-by-side.
+\begin{minipage}{.5\textwidth}
+  \centering
+  \includegraphics[width=.8\linewidth]{encoder.png}
+  \captionof{figure}{\ac{UNMT} encoder.}
+  \label{fig:encoder}
+\end{minipage}\hfill
+\begin{minipage}{.5\textwidth}
+  \centering
+  \includegraphics[width=\linewidth]{decoder.png}
+  \captionof{figure}{\ac{UNMT} decoder.}
+  \label{fig:decoder}
+\end{minipage}
+\end{figure}
 
 \subsection{\ac{UNMT} with a dictionary translation zero model}
 \label{sect:fully_unsupervised}
-The dictionary translation model is a translation process which uses a dictionary obtained with an unsupervised embedding~\citep{conneau2017word} (or otherwise an external dictionary could have been used if the language pair was known) to translate each sentence word by word.
+The dictionary translation model is a translation process which uses a dictionary obtained with an unsupervised embedding~\citep{conneau2017word} (or otherwise an external dictionary could have been used if the language pair was known) to translate each sentence using dictionary translation.
 
 To debug the zero model we first check the input to output copy which is reported in Table~\ref{table:results} as the {\tt In to Out Copy} result.
 Normally, we would expect an improvement over the {\tt In to Out Copy}, because it is closely related to dictionary translation: words which are not in the dictionary would be copied over from source to target sentences.
-
-\todo{ao}{Run word-by-word separately to see the impact}
-
-We do not know whether there is an error in our system or the corpora are too small.
-BLEU scores on all language pairs were below {\tt 0.01 BLEU}.
+BLEU scores on language pairs were below $0.01$~{\tt BLEU}.
 
 \subsection{\ac{UNMT} with a fully supervised zero model}
 \label{sect:semi_unsupervised}
-\todo{ao}{update this section with the results I have obtained myself running the simulations}
+The fully supervised model was trained in the same way as the baseline.
+Although the model itself was the Encoder-Decoder from UNMT and not the one from the baseline.
+The zero model gives a $0.08$~{\tt BLUE}, UNMT after adversarial training lasting a day gave results well below $0.01$~{\tt BLEU}.
 
 \section{Prior Language Pair Information}
 \label{sect:non_blind}
@@ -227,12 +251,12 @@ A set of all languages identifiable by the routine could be searched in log-time
 \begin{tabular}{ l c c c }
 Model & En-Ru Score & Lv-En Score & En-Ko Score \\
 \hline
-Supervised, 10 Epochs & 0.28915 & 0.05756 & 0.25418 \\
-In to Out Copy & 0.02123 & 0.02075 & 0.02759 \\
-Unsupervised UNMT & - & 0.00428 & - \\
-Semi-supervised UNMT & - & - & 0.03632 \\
-Competitors Best & - & 0.23338 & 0.30074 \\
-Literature Best, non-blind & 0.29800 & 0.22900 & 0.27950
+Supervised, 10 Epochs & 0.2892 & 0.0576 & 0.2542 \\
+In to Out Copy & 0.0212 & 0.0208 & 0.0276 \\
+Unsupervised UNMT & - & 0.0043 & - \\
+Semi-supervised UNMT & - & - & 0.0018 \\
+Competitors Best & - & 0.2334 & 0.3007 \\
+Literature Best, non-blind & 0.2980 & 0.2290 & 0.2795
 \end{tabular}
 \end{center}
 \caption{Evaluation results for models in the blind set-up, measured in BLEU scores.}

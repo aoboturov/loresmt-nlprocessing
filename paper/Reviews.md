@@ -160,10 +160,8 @@ done and added to the paper.
 We have realized that reporting the baseline improvement was simply irrelevant and we have spent more effort in presenting the UNMT model itself.
 + We have tried a number of different combinations of LSTM depths and cell-sizes, but optimal hyper parameters for the supervised baseline were not searched for: we have realized that the UNMT gives by an order of magnitude worse results, which we were not able to improve.
 + We have reported the competition results for the competition data, no experiments on data outside competition was reported because it would go beyond the scope of the system presentation.
-
-### TODO
-- Add figures depicting described MT architectures.
-- Present semi- and full- unsupervised models results.
++ Added figures depicting described MT architectures.
++ Presented semi- and full- unsupervised models results.
 
 ## REVIEWER \#3
 ---------------------------------------------------------------------------
@@ -289,9 +287,7 @@ Due to this, I'm giving the paper a rating 2.
 + Result for both supervised, semi-supervised and unsupervised models were provided throughout the article, we had regrouped them in Table 2.
 + Fixed table references.
 + Related work is now described in the end of the Competition Set-up Section.
-
-### TODO
-- Although appendix provides more detail information about system architecture, it's hard to understand. Scheme or figure would be much easy understandable.
++ Figures with information about system architecture were presented.
 
 ## REVIEWER \#6
 ---------------------------------------------------------------------------
@@ -335,7 +331,7 @@ obvious that this is the case.
 + Regarding the language identification - we have expanded introduction to the section `Prior Language Pair Information` to explain that the sheer size of models representations, total training time and amount and diversity of training data would make pre-training a non-viable option.
 
 ### TODO
-- Explain why we had a strongly negative result for the NMT.
+- Explain why we had a strongly negative result for the UNMT.
 - Explain our attempts to debug the UNMT.
 
 ## Paolo
