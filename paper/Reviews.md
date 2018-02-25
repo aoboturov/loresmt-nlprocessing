@@ -196,9 +196,7 @@ details.
 + We have used more advanced NMT models https://github.com/aoboturov/aoboturov-deephack-babel-qualification in the qualification round.
 The competition was about applicability of unsupervised and semi-supervised methods, so we have focused on them.
 + Title represents the system description for the competition as it was supposed to be.
-
-### TODO
-- Conclusion: doesn’t really conclude the paper
++ Conclusion was merged with the experimental results part to better present our results.
 
 ## REVIEWER \#4
 ---------------------------------------------------------------------------

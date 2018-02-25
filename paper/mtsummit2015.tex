@@ -269,11 +269,12 @@ The best {\tt Lv-En} and  {\tt En-Ru} are from the newstest2017 corpora in \cite
 % Lv-En \url{http://matrix.statmt.org/matrix/output/1872?score_id=22981}
 %\url{http://matrix.statmt.org/matrix/output/1875?score_id=21229}
 {\tt En-Ko} is reported from the work of \cite{junczys2016coppa}, which uses COPPA corpus.
-The Literature Best models provide an indicative benchmark on what a \ac{MT} system trained on a generic parallel corpus might score on a translation task when the language pair is known.
+The Literature Best models provide an indicative benchmark for what a \ac{MT} system trained on a generic parallel corpus might score on a translation task when the language pair is known.
 
 A generic fully unsupervised machine translation problem is hard.
 In some cases, one could obtain good machine translation models by having a small data set for a limited domain, e.g. for a case of traveling destinations or some other domain-specific translation.
 Although semi-supervised translation might improve the results, we have not observed that a fully supervised model used as the zero model for the \ac{UNMT} made any translation improvement over a regular supervised model.
+For this particular \ac{UNMT} architecture we report a negative result based on our experiments.
 Poor performance of the \ac{UNMT} has to be investigated further, possibly by providing larger non-parallel corpora and changing \ac{UNMT} model architecture.
 
 \small
