@@ -54,4 +54,4 @@ WORKDIR /model/
 COPY clean-corpus-monolingual.perl /model/
 COPY translate.sh /model/
 
-CMD ["/model/translate.sh", "5", "3", "400", "20", "1"]
+CMD ["/model/translate.sh", "5", "3", "400", "20", "2"]

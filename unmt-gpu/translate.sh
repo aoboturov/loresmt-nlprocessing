@@ -12,7 +12,7 @@ epochs=$1               # 5
 layers=$2               # 3
 rnn_size=$3             # 400
 fasttext_epochs=$4      # 20
-unsupervised_batches=$5 # 4000
+unsupervised_epochs=$5  # 2
 mosesdecoder=/model/mosesdecoder
 muse=/model/MUSE
 unmt=/model/UNMT
@@ -69,28 +69,31 @@ python3 $unmt/train.py \
     -train_tgt_mono /model/corpus.tok.clean.tc.$tgt \
     -train_src_bi /model/parallel.tok.clean.tc.$src \
     -train_tgt_bi /model/parallel.tok.clean.tc.$tgt \
+    -src_embeddings /model/embedding.ft.$src.vec \
+    -tgt_embeddings /model/embedding.ft.$tgt.vec \
+    -src_vocabulary /model/src.pickle \
+    -tgt_vocabulary /model/tgt.pickle \
+    -all_vocabulary /model/all.pickle \
     -layers $layers \
     -rnn_size $rnn_size \
     -src_vocab_size 40000 \
     -tgt_vocab_size 40000 \
     -print_every 100 \
     -batch_size 32 \
-    -src_embeddings /model/embedding.ft.$src.vec \
-    -tgt_embeddings /model/embedding.ft.$tgt.vec \
+    -save_every 200 \
     -discriminator_hidden_size 1024 \
+    -unsupervised_epochs $unsupervised_epochs \
     -supervised_epochs $epochs \
-    -unsupervised_epochs 1 \
-    -n_unsupervised_batches $unsupervised_batches \
-    -src_vocabulary /model/src.pickle \
-    -tgt_vocabulary /model/tgt.pickle \
-    -all_vocabulary /model/all.pickle
+    -save_model /model/model_unsupervised \
+    -reset_vocabularies 0 \
+    -enable_embedding_training 1
 
 # Prediction
 python3 $unmt/translate.py \
     -src_lang $src \
     -tgt_lang $tgt \
     -lang src \
-    -model model_supervised.pt \
+    -model model_unsupervised.pt \
     -input /model/input.tok.clean.tc.$src \
     -output /model/output.tok.clean.tc.$tgt \
     -src_vocabulary /model/src.pickle \
@@ -104,4 +107,3 @@ $mosesdecoder/scripts/recaser/detruecase.perl < /model/output.tok.clean.tc.$tgt 
 cat /model/output.tok.$tgt > /output/output.txt
 
 echo "DONE"
-
