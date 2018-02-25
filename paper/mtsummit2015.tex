@@ -80,13 +80,13 @@ Participants have no insight into the process and could only observe the final s
 For each language pair participants can submit multiple entries and, based on the scores, adapt their models.
 Submissions were scored in BLEU-4~\citep{papineni2002bleu}.
 The fact that the language pair was not known should have prevented participants from any specific tuning and pre-training of their submitted models; for each submitted model, it had a strict time limit for training and inference (8 hours in total for both stages) and a computational budget constrained by a single dedicated GPU.
-The participants' models were not allowed to access the internet in the training and the evaluation process.
+The participants' models were not allowed to access the internet or any external resources in the training and the evaluation process.
 
 For each language pair the following datasets~\footnote{Contest overview: \url{http://contest.deephack.me/c/babel/overview}} were available:
 \begin{itemize}
   \item each language of a pair has one monolingual corpora, {\tt 1M} sentences;
   \item a small parallel corpus, {\tt 50K} sentence pairs;
-  \item and an input corpus to be translated from source to target language, {\tt 6K} sentences.
+  \item an input corpus to be translated from source to target language, {\tt 6K} sentences.
 \end{itemize}
 
 There were 3 language pairs used during the competition: {\tt En-Ru} for test, {\tt Lv-En} for qualification and {\tt En-Ko} for final scoring.
@@ -123,9 +123,8 @@ Finally, in Section~\ref{sect:non_blind} we investigate whether prior knowledge 
 A supervised \ac{NMT} model~\footnote{For a full description of the Encoder-Decoder architecture see \url{https://github.com/aoboturov/loresmt-nlprocessing\#supervised-model-description}.} was chosen for the baseline.
 The model was implemented in OpenNMT~\citep{opennmt} and had the following Encoder-Decoder architecture:
 \begin{itemize}
-\item encoder is a continuous embedding from the source language to a $300$ dimensional space;
-\item followed by a $3$-layer \acs{LSTM} with a dropout;
-\item the decoder has a stacked \acs{LSTM} with a dropout, a global attention \citep{luong2015effective}, and a continuous embedding from a $300$ dimensional space.
+\item the encoder is $3$ \acs{LSTM} layers with a dropout based on $300$ dimensional word embeddings for the source language,
+\item the decoder is stacked \acs{LSTM} layers with a dropout and a global attention \citep{luong2015effective} based on $300$ dimensional word embeddings for the target language.
 \end{itemize}
 
 For each language pair a model was trained only on a {\tt 50K} parallel corpus with a {\tt 5\%} validation set.
@@ -135,7 +134,9 @@ We have a number of different combinations of \acs{LSTM} depths and cell-sizes, 
 We have realized that, even without optimal hyperparameters, the baseline beats the \ac{UNMT} score by an order of magnitude.
 
 On the {\tt Lv-En} language pair, the model performance was mediocre.
-This could be explained by the fact that {\tt En-Ru} and {\tt En-Ko} were topic-restricted corpora - both were related to tourism only, while the {\tt Lv-En} corpora was extracted from a news feed which had no topic constraints.
+This could be explained by the fact that {\tt En-Ru} and {\tt En-Ko} were topic-restricted corpora.
+In particular, both were related to tourism only.
+On the other hand, the {\tt Lv-En} corpus was extracted from a news feed which had no topic constraints.
 
 \section{Unsupervised Neural Machine Translation}
 \label{sect:unmt}
@@ -185,7 +186,7 @@ BLEU scores on all language pairs were below {\tt 0.01 BLEU}.
 
 In this section we describe how the blind set-up can be hacked to improve our results, given that the competition is structured so that the participants do not know the language-pairs being used, and it would be difficult to determine these language pairs within the scope of the competition.
 The hackathon could have had any pair-combination of $42$ languages supported by {{Booking.com}}, so the total number of models, if trained unidirectionally, would have been over $1500$.
-Given that even for our simplest baseline model an individual \ac{NMT} model is at least $300$~Megabytes, we would have had to train individual unidirectional models, likely for over several days, on some external parallel data, which we did not have for all language pairs, and to package around half a Terabyte of data inside a docker container, which is technologically unrealistic.
+Given that even for our simplest baseline model an individual \ac{NMT} model is at least $300$~megabytes, we would have had to train individual unidirectional models, likely for over several days, on some external parallel data, which we did not have for all language pairs, and to package around half of a terabyte of data inside a docker container, which is technologically unrealistic.
 We could have followed Google's \ac{NMT} approach~\citep{johnson2016google} or any other \ac{MT} approach, which have intermediate neural representation, to reduce the total number of models to just one, it should still have to be trained on external parallel corpora, even if they all would be just English to any other of the $41$ languages.
 To reduce the combinatorial complexity of the problem, one could potentially identify the language pair and then just train a single unidirectional model.
 The competition testing system prevented the access to any external resources and remote calls during training and inference phases.
@@ -198,7 +199,7 @@ On the one hand, we could see that a margin of improvement is just a couple of B
 On the other hand, {\tt Lv-En} has a very poor result and we would expect that both unsupervised learning and prior knowledge may improve this score.
 
 Below, we describe at least two ways how a language pair identification Side-Channel attack could be executed.
-The execution time attack is supposed to identify the language pair in a single submission, while the second one would require multiple submissions.
+The execution time attack is supposed to identify the language pair in a single submission, while the failure status attack would require multiple submissions.
 The number of submissions used to identify the language pair would matter when the total number of submissions for the competition is limited.
 
 \subsection{Using Execution Time}
@@ -228,7 +229,7 @@ In to Out Copy & 0.02123 & 0.02075 & 0.02759 \\
 Unsupervised UNMT & - & 0.00428 & - \\
 Semi-supervised UNMT & - & - & 0.03632 \\
 Competitors Best & - & 0.23338 & 0.30074 \\
-Literature Best, conscious & 0.29800 & 0.22900 & 0.27950
+Literature Best, non-blind & 0.29800 & 0.22900 & 0.27950
 \end{tabular}
 \end{center}
 \caption{Evaluation results for models in the blind set-up, measured in BLEU scores.}
@@ -236,7 +237,7 @@ Literature Best, conscious & 0.29800 & 0.22900 & 0.27950
 \end{table}
 
 In Table~\ref{table:results}, the first four models are the ones that we have produced for the competition, followed by the result reported by the winning team for each round.
-The last model is reported from literature reviews for the conscious set-up.
+The last model is reported from literature reviews for the non-blind set-up.
 The best {\tt Lv-En} and  {\tt En-Ru} are from the newstest2017 corpora in \cite{bojar2017findings}.
 % Lv-En \url{http://matrix.statmt.org/matrix/output/1872?score_id=22981}
 %\url{http://matrix.statmt.org/matrix/output/1875?score_id=21229}
