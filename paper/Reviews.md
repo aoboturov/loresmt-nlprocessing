@@ -288,9 +288,9 @@ Due to this, I'm giving the paper a rating 2.
 + Zero model is explain in the context of a training epoch for unsupervised model - it would be an initialization for the first epoch.
 + Result for both supervised, semi-supervised and unsupervised models were provided throughout the article, we had regrouped them in Table 2.
 + Fixed table references.
++ Related work is now described in the end of the Competition Set-up Section.
 
 ### TODO
-- No related work section.
 - Although appendix provides more detail information about system architecture, it's hard to understand. Scheme or figure would be much easy understandable.
 
 ## REVIEWER \#6

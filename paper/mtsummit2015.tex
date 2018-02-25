@@ -112,6 +112,7 @@ Given the problem at hand, a simple fully supervised \ac{NMT} baseline was imple
 
 To prepare for the {{DeepHack.Babel}} hackathon we looked into recent supervised \ac{NMT} systems~\footnote{One could find them on-line: \url{https://github.com/aoboturov/aoboturov-deephack-babel-qualification}} including: Google's seq2seq~\citep{Britz:2017}, {FAIR Sequence-to-Sequence Toolkit}~\citep{gehring2017convs2s}, {{Marian-NMT}}~\citep{junczys2016neural} and Sockeye~\citep{Sockeye:17}.
 For the competition, however, we focused on the theme of the hackathon, which was on unsupervised and semi-supervised models under the conditions of the blind set-up.
+The literature review indicated, that the blind set-up itself is novel: \citep{och2004smorgasbord}, \citep{tillmann2004unigram} and others call their experiments blind with respect to the hold-out set for the final scoring, but we were not able to find an experiment, which was blinded with respect to the language pair.
 
 In Section~\ref{sect:baseline} we outline the baseline that was used to benchmark the \ac{UNMT} in the blind set-up.
 In Section~\ref{sect:unmt} we discuss our experiments with the \ac{UNMT} model for the blind set-up.
