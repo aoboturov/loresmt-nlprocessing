@@ -87,6 +87,29 @@ I suggest the authors look at high-impact Machine Translation papers published
 in strong conferences/journals (ACL, EMNLP, CL Journal) and try to infer the
 minimum contribution expected for a paper in this field.
 
+### Response
++ As the first paragraph of the article we have added a description of why it would matter to compare supervised and unsupervised models for the case of topic-specific corpora.
++ Results table was rewritten from scratch.
+Our presentation there gave many irrelevant details that left all reviewers confused.
++ We have also left the unsupervised and semi-supervised NMT models results unreported (although the fully supervised case was reported to have less than 0.01, and now we provide exact numbers which we had).
++ The Unsupervised NMT Section was also rewritten because it did not give a clear presentation of what we actually did.
++ The language pair being unknown means that it was unknown at training time.
+Language pairs were evaluated independently, so no universal model was developed.
+We have also detailed the competition setup to answer your questions.
++ An input to output copy (not attention copy) was not a competition baseline, but a way for us to "benchmark" dictionary learning for the fully unsupervised model to check if it is actually working.
++ Zero model is now explained - it is just a way of calling the initial model for iterative unsupervised training epochs.
++ We have significantly expanded the Section talking about "language pair attacks" to explain how they could be used in the oblivious setup.
+We put BLUE scores from systems trained for translation tasks from major NLP conferences as an indication of how the prior knowledge might impact the results.
+Also a comparison of using one attack compare versus using the other is added.
++ We have moved the parts which indeed lack content, like Table 2 and most of the Table 1 to the online supplement and provided a number of footnotes to it - that cut us almost 2.5 pages.
+
+### TODO
+- In Section 2, the authors mention "continuous embeddings" multiple times, which
+does not sound correct.
+- The authors should specify how the different models are trained (NLL loss? Cross-entropy
+loss? Minimum risk? Etc.), specially for the unsupervised NMT scenario; what is the objective function being minimised/maximised there?;
+- How is the data pre-processed (lowercasing, tokenising, BPE-encoding, etc.).
+
 ## REVIEWER \#2
 ---------------------------------------------------------------------------
 Reviewer's Scores
