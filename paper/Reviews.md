@@ -338,3 +338,20 @@ obvious that this is the case.
 ### TODO
 - Explain why we had a strongly negative result for the NMT.
 - Explain our attempts to debug the UNMT.
+
+## Paolo
+---------------------------------------------------------------------------
+Comments
+---------------------------------------------------------------------------
+
+In your abstract, you have to state what is the problem/issue you want to address or the objective of the paper. For example. In your first sentence, you did a comparison between supervised and unsupervised NMT. My question as a reader would be Why? Why did you want to do this comparison?
+
+another point i would like to make about the abstract is that you may want to state the ideas in generalized terms and just use the hackathon as the context or backdrop. For example, you can generalize the theme of the hackathon and the oblivious setup in a real-world situation. you then use your experience in the hackathon as a means of addressing the initial problem/issue that you have observed, as well as the hack that you discovered in the course of the competition and its implications in real world situations (e.g. how can we take advantage of this knowledge?).
+
+For me, the Prior Language Pair Information section kind of appears out of nowhere.  But I can see the rationale behind it. This means you have to put this section into context.  For example, why or how did you come up with this idea? Was it due to the poor results of your unsupervised and semi-supervised systems, from which you thought that if you can determine a procedure to systematically determine the language pairs (or what you call hacking), you could vastly improve the performance of your systems. Could you even automate this "hacking" procedure or be embedded in your unsupervised and semi-supervised systems.
+
+then you can end this section by stating how this "hacking" can be used in real world applications.
+
+In your conclusion, you can add a paragraph at the bottom about this section. This paragraph should connect with your findings on your unsupervised and semi-supervised systems. This is like saying that, on the one hand, given the conditions of the competition you had poor results. On the other hand, the format of the competition had allowed you to determine a way to improve your results. Then state why this new knowledge is important or what are its practical implications.
+
+To vastly improve this paper, and this I imagine will take time, is that you test your method of determining the language pair as described in section 4. I think this could be a more interesting topic. In fact, if you are able to do this, you can refocus the paper based on this idea, and your experience at the hackathon provides the backrdop or context for the refocused paper.  
