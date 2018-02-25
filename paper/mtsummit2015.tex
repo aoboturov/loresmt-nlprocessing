@@ -52,16 +52,17 @@
 \pagestyle{empty}
 
 \begin{abstract}
-  A comparison~\footnote{Images used to train models are publicly available at \url{https://github.com/aoboturov/loresmt-nlprocessing}} of supervised and unsupervised \ac{NMT} models was done for the corpora provided by the DeepHack.Babel competition.
-  It is shown that for even small parallel corpus, fully supervised \ac{NMT} gives better results than fully unsupervised for the case of constrained domain of the corpus.
-  We have also implemented a fully unsupervised and a semi-supervised \ac{NMT} models which have not given positive results compared to fully supervised models.
-  An oblivious setup is described where participants know at no point what language pair is used for translation, so no extra-corpora data could be integrated in pre-submission phase or during training.
-  Finally, future competition organizers should find ways to protect their competition set ups against various strategies (we have reported two) to discover language pairs in the oblivious setup.
+A comparison~\footnote{Images used to train models are publicly available at \url{https://github.com/aoboturov/loresmt-nlprocessing}} of supervised and unsupervised \ac{NMT} models was done for the corpora provided by the DeepHack.Babel competition.
+It is shown that for even small parallel corpus, fully supervised \ac{NMT} gives better results than fully unsupervised for the case of constrained domain of the corpus.
+We have also implemented a fully unsupervised and a semi-supervised \ac{NMT} models which have not given positive results compared to fully supervised models.
+A blind set-up is described where participants know at no point what language pair is used for translation, so no extra data could be integrated in pre-submission phase or during training.
+Finally, future competition organizers should find ways to protect their competition set-ups against various attacks in order to prevent from revealing of language pairs.
+We have reported two possible types of attacks on the blind set-up.
 \end{abstract}
 
 \acresetall
-\section{Competition Setup}
-\label{sect:setup}
+\section{Competition Set-up}
+\label{sect:set_up}
 
 The work presented here is motivated by the following observation: an industrial \ac{NMT} system is usually built on a huge parallel corpora and trained for days or even weeks.
 A "raw" \ac{NMT} model is then tuned by additional training on client-specific data and by augmentation with some domain-specific information.
@@ -72,9 +73,9 @@ It might also help for the case of low resource languages when no large parallel
 This paper attempts to answer these questions.
 
 We present the results obtained by the "NL~Processing" team in the DeepHack.Babel hackathon~\footnote{The leaderboard: \url{http://contest.deephack.me/c/babel/leaderboard}} on semi-supervised machine translation.
-Organizers of the competition created an oblivious setup - a case in which the source and target languages are not known at any point of competition and the machine translation system can be trained with no specific tuning to the language pair.
-Langauge pairs were trained and scored independently, so no one sought to build a universal model.
-The scoring system would run the training and then run the translation with the trained model.
+Organizers of the competition created a blind set-up - a case in which the source and target languages are not known at any stage of the competition and the machine translation system should be trained with no specific tuning to the language pair.
+Language pairs were trained and scored independently, so no one sought to build a universal model.
+Training and translation were performed by the scoring system.
 Participants have no insight into the process and could only observe the final score for a submission and/or the failure status.
 For each language pair participants can submit multiple entries and, based on the scores, adapt their models.
 Submissions were scored in BLEU-4~\citep{papineni2002bleu}.
@@ -110,11 +111,11 @@ The machine translation system could be built as a fully supervised one, though 
 Given the problem at hand, a simple fully supervised \ac{NMT} baseline was implemented which was then compared against the \ac{UNMT} model which was trained both in fully unsupervised and semi-supervised modes.
 
 To prepare for the {{DeepHack.Babel}} hackathon we looked into recent supervised \ac{NMT} systems~\footnote{One could find them on-line: \url{https://github.com/aoboturov/aoboturov-deephack-babel-qualification}} including: Google's seq2seq~\citep{Britz:2017}, {FAIR Sequence-to-Sequence Toolkit}~\citep{gehring2017convs2s}, {{Marian-NMT}}~\citep{junczys2016neural} and Sockeye~\citep{Sockeye:17}.
-For the competition, however, we focused on the theme of the hackathon, which was on unsupervised and semi-supervised models under the conditions of the oblivious setup.
+For the competition, however, we focused on the theme of the hackathon, which was on unsupervised and semi-supervised models under the conditions of the blind set-up.
 
-In Section~\ref{sect:baseline} we outline the baseline that was used to benchmark the \ac{UNMT} in the oblivious setup.
-In Section~\ref{sect:unmt} we discuss our experiments with the \ac{UNMT} model for the oblivious setup.
-Finally, in Section~\ref{sect:nonoblivious} we investigate whether prior knowledge of a language pair gives an advantage for the unsupervised \ac{NMT} approach.
+In Section~\ref{sect:baseline} we outline the baseline that was used to benchmark the \ac{UNMT} in the blind set-up.
+In Section~\ref{sect:unmt} we discuss our experiments with the \ac{UNMT} model for the blind set-up.
+Finally, in Section~\ref{sect:non_blind} we investigate whether prior knowledge of a language pair gives an advantage for the unsupervised \ac{NMT} approach.
 
 \section{Baseline}
 \label{sect:baseline}
@@ -133,15 +134,15 @@ Additionally, embeddings were trained with Fasttext~\citep{bojanowski2016enrichi
 We have a number of different combinations of \acs{LSTM} depths and cell-sizes, but we did not search for optimal hyper parameters for the supervised baseline.
 We have realized that, even without optimal hyperparameters, the baseline beats the \ac{UNMT} score by an order of magnitude.
 
-On the {\tt Lv-En} langauge pair, the model performance was mediocre.
-This could be explained by the fact that {\tt En-Ru} and {\tt En-Ko} were topic-resticted corpora - both were related to tourism only, while the {\tt Lv-En} corpora was extracted from a news feed which had no topic constraints.
+On the {\tt Lv-En} language pair, the model performance was mediocre.
+This could be explained by the fact that {\tt En-Ru} and {\tt En-Ko} were topic-restricted corpora - both were related to tourism only, while the {\tt Lv-En} corpora was extracted from a news feed which had no topic constraints.
 
 \section{Unsupervised Neural Machine Translation}
 \label{sect:unmt}
 
 The competition included not only parallel corpus for each language pair, but also {\tt 1M} monolingual corpus for each language.
 One way to leverage this data is to use unsupervised \ac{NMT} model described in \cite{DBLP:journals/corr/abs-1711-00043}.
-The code for this model is not available, so we built our own implementation~\footnote{Implementation of the \acs{UNMT}: \url{https://github.com/IlyaGusev/UNMT}} based on the PyTorch~\citep{paszke2017automatic} framework. 
+The code for this model is not available, so we built our own implementation~\footnote{Implementation of the \acs{UNMT}: \url{https://github.com/IlyaGusev/UNMT}} based on the PyTorch~\citep{paszke2017automatic} framework.
 One can train this model on monolingual corpora using a predefined initial model, which we refer to in this paper as the zero model.
 The goal of the competition was to find unsupervised and semi-supervised \ac{MT} methods applicable in practice.
 A fully unsupervised case is covered in Section~\ref{sect:fully_unsupervised}, while a semi-supervised approach is described in Section~\ref{sect:semi_unsupervised}.
@@ -180,17 +181,17 @@ BLEU scores on all language pairs were below {\tt 0.01 BLEU}.
 \todo{ao}{update this section with the results I have obtained myself running the simulations}
 
 \section{Prior Language Pair Information}
-\label{sect:nonoblivious}
+\label{sect:non_blind}
 
-In this section we describe how the oblivious setup can be hacked to improve our results, given that the competition is structured so that the participants do not know the language-pairs being used, and it would be difficult to determine these language pairs within the scope of the competition.
-The Hackathon could have had any pair-combination of $42$ languages supported by {{Booking.com}}, so the total number of models, if trained undirectionally, would have been over $1500$.
+In this section we describe how the blind set-up can be hacked to improve our results, given that the competition is structured so that the participants do not know the language-pairs being used, and it would be difficult to determine these language pairs within the scope of the competition.
+The hackathon could have had any pair-combination of $42$ languages supported by {{Booking.com}}, so the total number of models, if trained unidirectionally, would have been over $1500$.
 Given that even for our simplest baseline model an individual \ac{NMT} model is at least $300$~Megabytes, we would have had to train individual unidirectional models, likely for over several days, on some external parallel data, which we did not have for all language pairs, and to package around half a Terabyte of data inside a docker container, which is technologically unrealistic.
 We could have followed Google's \ac{NMT} approach~\citep{johnson2016google} or any other \ac{MT} approach, which have intermediate neural representation, to reduce the total number of models to just one, it should still have to be trained on external parallel corpora, even if they all would be just English to any other of the $41$ languages.
 To reduce the combinatorial complexity of the problem, one could potentially identify the language pair and then just train a single unidirectional model.
 The competition testing system prevented the access to any external resources and remote calls during training and inference phases.
 The sheer size of model representations, the total training time, amount and diversity of training data and technical constraints would make pre-training a non-viable option.
 The only information available to participants was the BLEU score and the failure or success status for the submission.
-With these information, however, one could devise at least two attacks to identify the language pair and then using this prior knowledge, use it to consturct a better translation algorithm.
+With these information, however, one could devise at least two attacks to identify the language pair and then using this prior knowledge, use it to construct a better translation algorithm.
 
 In Table~\ref{table:results} we reported the best BLEU scores available within the conference submissions for each of the pairs trained on common corpora.
 On the one hand, we could see that a margin of improvement is just a couple of BLEU points for {\tt En-Ru} and {\tt En-Ko} pairs.
@@ -222,7 +223,7 @@ A set of all languages identifiable by the routine could be searched in log-time
 \begin{tabular}{ l c c c }
 Model & En-Ru Score & Lv-En Score & En-Ko Score \\
 \hline
-Supervized, 10 Epochs & 0.28915 & 0.05756 & 0.25418 \\
+Supervised, 10 Epochs & 0.28915 & 0.05756 & 0.25418 \\
 In to Out Copy & 0.02123 & 0.02075 & 0.02759 \\
 Unsupervised UNMT & - & 0.00428 & - \\
 Semi-supervised UNMT & - & - & 0.03632 \\
@@ -230,12 +231,12 @@ Competitors Best & - & 0.23338 & 0.30074 \\
 Literature Best, conscious & 0.29800 & 0.22900 & 0.27950
 \end{tabular}
 \end{center}
-\caption{Evaluation results for models in the oblivious setup, measured in BLEU scores.}
+\caption{Evaluation results for models in the blind set-up, measured in BLEU scores.}
 \label{table:results}
 \end{table}
 
 In Table~\ref{table:results}, the first four models are the ones that we have produced for the competition, followed by the result reported by the winning team for each round.
-The last model is reported from literature reviews for the conscious setup.
+The last model is reported from literature reviews for the conscious set-up.
 The best {\tt Lv-En} and  {\tt En-Ru} are from the newstest2017 corpora in \cite{bojar2017findings}.
 % Lv-En \url{http://matrix.statmt.org/matrix/output/1872?score_id=22981}
 %\url{http://matrix.statmt.org/matrix/output/1875?score_id=21229}
@@ -243,7 +244,7 @@ The best {\tt Lv-En} and  {\tt En-Ru} are from the newstest2017 corpora in \cite
 The Literature Best models provide an indicative benchmark on what a \ac{MT} system trained on a generic parallel corpus might score on a translation task when the language pair is known.
 
 A generic fully unsupervised machine translation problem is hard.
-In some cases, one could obtain good machine translation models by having a small data set for a limited domain, e.g. for a case of travelling destinations or some other domain-specific translation.
+In some cases, one could obtain good machine translation models by having a small data set for a limited domain, e.g. for a case of traveling destinations or some other domain-specific translation.
 Although semi-supervised translation might improve the results, we have not observed that a fully supervised model used as the zero model for the \ac{UNMT} made any translation improvement over a regular supervised model.
 Poor performance of the \ac{UNMT} has to be investigated further, possibly by providing larger non-parallel corpora and changing \ac{UNMT} model architecture.
 
@@ -253,4 +254,3 @@ Poor performance of the \ac{UNMT} has to be investigated further, possibly by pr
 \bibliography{mtsummit2015}
 
 \end{document}
-
