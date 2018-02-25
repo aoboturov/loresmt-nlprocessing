@@ -36,7 +36,7 @@
 \begin{acronym}
 \acro{NMT}{Neural Machine Translation}
 \acro{MT}{Machine Translation}
-\acro{UNMT}{Unsupervised Machine Translation Using Monolingual Corpora Only model}
+\acro{UNMT}{Unsupervised Machine Translation Using Monolingual Corpora Only}
 \end{acronym}
 
 % \mtsummitHeader{x}{x}{xxx-xxx}{2015}{45-character paper description goes here}{Author(s) initials and last name go here}
@@ -59,7 +59,7 @@
 \section{Competition Setup}
 \label{sect:setup}
 
-We present results obtained by the "NL~Processing" team during the DeepHack.Babel hackathon~\footnote{The leaderboard: \url{http://contest.deephack.me/c/babel/leaderboard}} on semi-supervised machine translation.
+We present results obtained by the "NL~Processing" team in the DeepHack.Babel hackathon~\footnote{The leaderboard: \url{http://contest.deephack.me/c/babel/leaderboard}} on semi-supervised machine translation.
 Organizers of the competition created an oblivious setup - a case in which the source and target languages are not known and the machine translation system can be trained with no specific tuning to the language pair.
 The scoring system would run training and then run translation with the trained model.
 Participants have no insight into the process and could only observe the final score for a submission and/or the failure status.
@@ -90,11 +90,14 @@ En-Ko & 14M & 157649 & 7M & 530124 \\
 \end{table}
 
 The machine translation system could be built as a fully supervised one, though the parallel corpus is small ({\tt 50K}); as an unsupervised one, using the two monolingual corpora; and as a semi-supervised one.
-Our solutions followed the fully supervised and fully unsupervised approaches only.
+Given the problem at hand, a simple fully supervised \ac{NMT} baseline was implemented which was then compared against the \ac{UNMT} model which was trained both in fully unsupervised and semi-supervised modes.
 
-Given the problem at hand, the paper devises a number of baseline approaches and then compare them to the unsupervised model described above.
-Section~\ref{sect:baseline} will outline the baselines which were used to benchmark the unsupervised \ac{NMT} in the oblivious setup.
-In Section~\ref{sect:unmt} we discuss the experiments with the unsupervised \ac{NMT} model for the oblivious setup.
+Preparing for the {{DeepHack.Babel}} hackaton we have looked into recent supervised \ac{NMT} systems~\footnote{One could find them on-line: \url{https://github.com/aoboturov/aoboturov-deephack-babel-qualification}} including: Google's seq2seq~\citep{Britz:2017}, {FAIR Sequence-to-Sequence Toolkit}~\citep{gehring2017convs2s}, {{Marian-NMT}}~\citep{junczys2016neural} and Sockeye~\citep{Sockeye:17}.
+For the competition itself it was decided by the team against doing only supervised models.
+The hackaton theme was unsupervised and semi-supervised approaches in the oblivious setup, so that became our primary focus.
+
+Section~\ref{sect:baseline} will outline the baseline which was used to benchmark the \ac{UNMT} in the oblivious setup.
+In Section~\ref{sect:unmt} we discuss the experiments with the \ac{UNMT} model for the oblivious setup.
 Finally, in Section~\ref{sect:nonoblivious} we investigate whether prior knowledge of a language pair gives an advantage for the unsupervised \ac{NMT} approach.
 
 \section{Baseline}
@@ -122,7 +125,7 @@ Supervized, 10 Epochs & 0.28915 & 0.05756 & 0.25418 \\
 In to Out Copy & 0.02123 & 0.02075 & 0.02759 \\
 Unsupervised UNMT & - & 0.00428 & - \\
 Semi-supervised UNMT & - & - & 0.03632 \\
-Literature Best, generic & 0.298 & 0.229 & 0.2795 \\
+Literature Best, generic & 0.29800 & 0.22900 & 0.27950 \\
 Competitors Best & - & - & 0.30074
 \end{tabular}
 \end{center}

@@ -158,6 +158,17 @@ Conclusion: doesn’t really conclude the paper
 The paper doesn’t answer the question in the title. Elaborate this with more
 details.
 
+### Response
++ `NL Processing` was the team name - sorry, it was very confusing.
++ Fixed problems related to English language usage.
++ We have used more advanced NMT models https://github.com/aoboturov/aoboturov-deephack-babel-qualification in the qualification round.
+The competition was about applicability of unsupervised and semi-supervised methods, so we have focused on them.
+
+### TODO
+- Conclusion: doesn’t really conclude the paper
+- The paper doesn’t answer the question in the title. Elaborate this with more
+details.
+
 ## REVIEWER \#4
 ---------------------------------------------------------------------------
 Reviewer's Scores
