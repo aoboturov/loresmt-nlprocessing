@@ -131,6 +131,18 @@ place it before Section 4.
 Overall, I think this paper could published after proposed improvements are
 done and added to the paper.
 
+### Response
++ We do indeed used a single supervised baseline, Section was updated accordingly.
++ Corpora description was moved to the Competition Setup Section as was suggested.
++ Consecutive epochs reporting was completely removed, instead we report only final fully supervised model baseline results.
+We have realized that reporting the baseline improvement was simply irrelevant and we have spent more effort in presenting the UNMT model itself.
++ We have tried a number of different combinations of LSTM depths and cell-sizes, but optimal hyper parameters for the supervised baseline were not searched for: we have realized that the UNMT gives by an order of magnitude worse results, which we were not able to improve.
++ We have reported the competition results for the competition data, no experiments on data outside competition was reported because it would go beyond the scope of the system presentation.
+
+### TODO
+- Add figures depicting described MT architectures.
+- Present semi- and full- unsupervised models results.
+
 ## REVIEWER \#3
 ---------------------------------------------------------------------------
 Reviewer's Scores
@@ -163,11 +175,10 @@ details.
 + Fixed problems related to English language usage.
 + We have used more advanced NMT models https://github.com/aoboturov/aoboturov-deephack-babel-qualification in the qualification round.
 The competition was about applicability of unsupervised and semi-supervised methods, so we have focused on them.
++ Title represents the system description for the competition as it was supposed to be.
 
 ### TODO
 - Conclusion: doesn’t really conclude the paper
-- The paper doesn’t answer the question in the title. Elaborate this with more
-details.
 
 ## REVIEWER \#4
 ---------------------------------------------------------------------------

@@ -37,6 +37,7 @@
 \acro{NMT}{Neural Machine Translation}
 \acro{MT}{Machine Translation}
 \acro{UNMT}{Unsupervised Machine Translation Using Monolingual Corpora Only}
+\acro{LSTM}{Long Short Term Memory}
 \end{acronym}
 
 % \mtsummitHeader{x}{x}{xxx-xxx}{2015}{45-character paper description goes here}{Author(s) initials and last name go here}
@@ -107,14 +108,15 @@ A supervised \ac{NMT} model~\footnote{For a full description of the Encoder-Deco
 The model was implemented in OpenNMT~\citep{opennmt} and had the following Encoder-Decoder architecture:
 \begin{itemize}
 \item encoder is a continuous embedding from the source language to a $300$ dimensional space;
-\item followed by a $3$-layers LSTM with a dropout;
-\item the decoder has a stacked LSTM with a dropout, a global attention \citep{luong2015effective} and a continuous embedding from a $300$ dimensional space.
+\item followed by a $3$-layers \acs{LSTM} with a dropout;
+\item the decoder has a stacked \acs{LSTM} with a dropout, a global attention \citep{luong2015effective} and a continuous embedding from a $300$ dimensional space.
 \end{itemize}
 
 For each language pair a model was trained only on a {\tt 50K} parallel corpus with a {\tt 5\%} validation set.
 Training on a NVIDIA Titan XP GPU usually lasted $20$ to $30$ minutes.
 The results are provided in Table~\ref{table:results}.
 Additionally, embeddings were trained with Fasttext~\citep{bojanowski2016enriching}.
+We have tried a number of different combinations of \acs{LSTM} depths and cell-sizes, but optimal hyper parameters for the supervised baseline were not searched for: we have realized that, even without optimal hyperparameters, the baseline beats the \ac{UNMT} score by an order of magnitude.
 
 \begin{table}
 \begin{center}
