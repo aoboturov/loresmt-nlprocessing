@@ -128,6 +128,7 @@ The model was implemented in OpenNMT~\citep{opennmt} and had the following Encod
 \end{itemize}
 
 For each language pair a model was trained only on a {\tt 50K} parallel corpus with a {\tt 5\%} validation set.
+Data (except for Korean) were lowercased and tokenized with Moses~\citep{koehn2007moses}.
 Training on an NVIDIA Titan XP GPU usually lasted for $20$ to $30$ minutes, the results of which are provided in Table~\ref{table:results}.
 Additionally, embeddings were trained with Fasttext~\citep{bojanowski2016enriching}.
 We have a number of different combinations of \acs{LSTM} depths and cell-sizes, but we did not search for optimal hyper parameters for the supervised baseline.
@@ -150,6 +151,7 @@ A fully unsupervised case is covered in Section~\ref{sect:fully_unsupervised}, w
 
 The \ac{UNMT}~\footnote{The \ac{UNMT} model used for translation is described in \url{https://github.com/aoboturov/loresmt-nlprocessing\#unmt-model-description}} would train iteratively using adversarial training~\citep{goodfellow2016nips} with a discriminator~\footnote{The Discriminator description is available online \url{https://github.com/aoboturov/loresmt-nlprocessing\#unmt-discriminator-description}}.
 In both the semi-supervised and unsupervised cases we ran an unsupervised training epoch which starts from a batch of sentences translated by a model from a previous iteration of unsupervised training (or zero model if it is the first iteration) followed by a noising layer and a pass through the model that has been trained on the current iteration.
+The preprocessing was done with Moses~\citep{koehn2007moses}: data were lowercased and tokenized (except for Korean).
 Figure~\ref{fig:unsupervised_training} gives a graphical explanation of the training process.
 
 \begin{figure}

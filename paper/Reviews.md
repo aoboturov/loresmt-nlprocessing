@@ -102,13 +102,12 @@ We have also detailed the competition setup to answer your questions.
 We put BLUE scores from systems trained for translation tasks from major NLP conferences as an indication of how the prior knowledge might impact the results.
 Also a comparison of using one attack compare versus using the other is added.
 + We have moved the parts which indeed lack content, like Table 2 and most of the Table 1 to the online supplement and provided a number of footnotes to it - that cut us almost 2.5 pages.
++ We have meant word embeddings - and not a continuous map.
++ Data pre-processing pipeline (except for Korean) consisted of lowercasing and tokenising.
 
 ### TODO
-- In Section 2, the authors mention "continuous embeddings" multiple times, which
-does not sound correct.
 - The authors should specify how the different models are trained (NLL loss? Cross-entropy
 loss? Minimum risk? Etc.), specially for the unsupervised NMT scenario; what is the objective function being minimised/maximised there?;
-- How is the data pre-processed (lowercasing, tokenising, BPE-encoding, etc.).
 
 ## REVIEWER \#2
 ---------------------------------------------------------------------------
