@@ -3,11 +3,15 @@
 ## Remarks from the AMTA 2018 Program Committee
 - We would like to invite you to provide a two or three pages version of your paper.
 - Please consider renaming your paper as `"System description of ----- from ---- team at DeepHack.Babel task"` (or something that would reflect the contents of your shortened paper.
+- In the title ”NL Processing” should be typed in LaTeX as ``NL Processing''
+- There is no affiliation below your name.  Is that correct?
+- Please rename the last section `5 Results` as `5 Results and Conclusions`
 
 ### Response
 + We have moved the appendices online which immediately cut the paper size by 2 pages.
 + The sample of parallel corpora was also made available online only - a reduction by half a page.
 + Title was changed to `System description of Supervised and Unsupervised NMT approaches from NL Processing team at DeepHack.Babel task`
++ Formatting was fixed
 
 ## REVIEWER \#1
 ---------------------------------------------------------------------------
