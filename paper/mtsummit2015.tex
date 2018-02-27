@@ -111,7 +111,7 @@ En-Ko & 14M & 157649 & 7M & 530124 \\
 The machine translation system could be built as a fully supervised one, though the parallel corpus is small ({\tt 50K}); as an unsupervised one, using the two monolingual corpora; and as a semi-supervised one.
 Given the problem at hand, a simple fully supervised \ac{NMT} baseline was implemented which was then compared against the \ac{UNMT} model which was trained both in fully unsupervised and semi-supervised modes.
 
-To prepare for the {{DeepHack.Babel}} hackathon we looked into recent supervised \ac{NMT} systems~\footnote{One could find them on-line: \url{https://github.com/aoboturov/aoboturov-deephack-babel-qualification}} including: Google's seq2seq~\citep{Britz:2017}, {FAIR Sequence-to-Sequence Toolkit}~\citep{gehring2017convs2s}, {{Marian-NMT}}~\citep{junczys2016neural} and Sockeye~\citep{Sockeye:17}.
+To prepare for the {{DeepHack.Babel}} hackathon we looked into recent supervised \ac{NMT} systems~\footnote{One could find them on-line: \url{https://github.com/aoboturov/aoboturov-deephack-babel-qualification}} including: Google's seq2seq~\citep{britz2017massive}, {FAIR Sequence-to-Sequence Toolkit}~\citep{gehring2017convs2s}, {{Marian-NMT}}~\citep{junczys2016neural} and Sockeye~\citep{Sockeye:17}.
 For the competition, however, we focused on the theme of the hackathon, which was on unsupervised and semi-supervised models under the conditions of the blind set-up.
 The literature review indicated, that the blind set-up itself is novel: \citep{och2004smorgasbord}, \citep{tillmann2004unigram} and others call their experiments blind with respect to the hold-out set for the final scoring, but we were not able to find an experiment, which was blinded with respect to the language pair.
 
@@ -132,7 +132,7 @@ The model was implemented in OpenNMT~\citep{opennmt} and had the following Encod
 For each language pair a model was trained only on a {\tt 50K} parallel corpus with a {\tt 5\%} validation set.
 Data were lowercased and tokenized with Moses~\citep{koehn2007moses}.
 Training on an NVIDIA Titan XP GPU usually lasted for $20$ to $30$ minutes, the results of which are provided in Table~\ref{table:results}.
-Additionally, embeddings were trained with Fasttext~\citep{bojanowski2016enriching}.
+Additionally, embeddings were trained with Fasttext~\citep{bojanowski2017enriching}.
 We have a number of different combinations of \acs{LSTM} depths and cell-sizes, but we did not search for optimal hyper parameters for the supervised baseline.
 We have realized that, even without optimal hyperparameters, the baseline beats the \ac{UNMT} score by an order of magnitude.
 
@@ -174,7 +174,7 @@ Figure~\ref{fig:unsupervised_training} gives a graphical explanation of the trai
 \end{figure}
 
 There are two types of zero models which we have used: dictionary translation, and a supervised model trained on a small corpora.
-The translation model has an RNN Encoder-Decoder architecture \citep{DBLP:journals/corr/ChoMGBSB14} with word embeddings and a global attention \citep{luong2015effective}.
+The translation model has an RNN Encoder-Decoder architecture \citep{cho2014learning} with word embeddings and a global attention \citep{luong2015effective}.
 Figure~\ref{fig:encoder} depicts the encoder and Figure~\ref{fig:decoder} presents the decoder.
 
 \begin{figure}
@@ -214,7 +214,7 @@ The zero model gives a $0.08$~{\tt BLUE}, UNMT after adversarial training lastin
 In this section we describe how the blind set-up can be hacked to improve our results, given that the competition is structured so that the participants do not know the language-pairs being used, and it would be difficult to determine these language pairs within the scope of the competition.
 The hackathon could have had any pair-combination of $42$ languages supported by {{Booking.com}}, so the total number of models, if trained unidirectionally, would have been over $1500$.
 Given that even for our simplest baseline model an individual \ac{NMT} model is at least $300$~megabytes, we would have had to train individual unidirectional models, likely for over several days, on some external parallel data, which we did not have for all language pairs, and to package around half of a terabyte of data inside a docker container, which is technologically unrealistic.
-We could have followed Google's \ac{NMT} approach~\citep{johnson2016google} or any other \ac{MT} approach, which have intermediate neural representation, to reduce the total number of models to just one, it should still have to be trained on external parallel corpora, even if they all would be just English to any other of the $41$ languages.
+We could have followed Google's \ac{NMT} approach~\citep{johnson2017google} or any other \ac{MT} approach, which have intermediate neural representation, to reduce the total number of models to just one, it should still have to be trained on external parallel corpora, even if they all would be just English to any other of the $41$ languages.
 To reduce the combinatorial complexity of the problem, one could potentially identify the language pair and then just train a single unidirectional model.
 The competition testing system prevented the access to any external resources and remote calls during training and inference phases.
 The sheer size of model representations, the total training time, amount and diversity of training data and technical constraints would make pre-training a non-viable option.
