@@ -1,0 +1,110 @@
+\documentclass{beamer}
+
+\mode<presentation> {
+
+\usetheme{Madrid}
+%\usecolortheme{wolverine}
+
+%\setbeamertemplate{footline} % To remove the footer line in all slides uncomment this line
+%\setbeamertemplate{footline}[page number] % To replace the footer line in all slides with a simple slide count uncomment this line
+
+%\setbeamertemplate{navigation symbols}{} % To remove the navigation symbols from the bottom of all slides uncomment this line
+}
+
+\usepackage{graphicx} % Allows including images
+\usepackage{booktabs} % Allows the use of \toprule, \midrule and \bottomrule in tables
+
+%----------------------------------------------------------------------------------------
+%   TITLE PAGE
+%----------------------------------------------------------------------------------------
+
+\title[Supervised and Unsupervised NMT]{System description of Supervised and Unsupervised Neural Machine Translation approaches from “NL Processing” team at DeepHack.Babel task}
+
+\author[Gusev, Oboturov]{Ilya Gusev \inst{1} \and \it{Artem Oboturov} \inst{2}}
+\institute[]{\inst{1} MIPT \url{ilya.gusev@phystech.edu} \and %
+                      \inst{2} \url{oboturov@gmail.com}}
+\date{21 March, 2018}
+
+\begin{document}
+
+\begin{frame}
+\titlepage % Print the title page as the first slide
+\end{frame}
+
+\begin{frame}
+\frametitle{Overview}
+\tableofcontents
+\end{frame}
+
+%----------------------------------------------------------------------------------------
+%   PRESENTATION SLIDES
+%----------------------------------------------------------------------------------------
+
+%------------------------------------------------
+\section{Competition Set-up}
+%------------------------------------------------
+
+\begin{frame}
+\frametitle{Competition Set-up}
+
+\begin{itemize}
+\item the blind set-up: source and target languages are not known
+\item teams provide model blueprints to organizers
+\item organizers perform both training and inference on hidden data
+\item resources for training and inference are intentionally constrained
+\item total number of submissions is limited
+\end{itemize}
+
+\onslide<2-4>{
+\begin{block}{Incentives}
+\begin{itemize}
+\item<2-4> one could not just use hyper-parameter optimization to get better scores
+\item<3-4> ensembling is still possible
+\item<4> the set-up encourages to provide a universal blueprint
+\end{itemize}
+\end{block}
+}
+
+\end{frame}
+
+%------------------------------------------------
+\section{Baseline}
+%------------------------------------------------
+
+\begin{frame}
+\frametitle{Fully Supervised NMT Model}
+
+\begin{itemize}
+\item fast to train (20-30 mins on GPU)
+\item available out of the shelf in OpenNMT
+\item permits to establish a very strait forward baseline
+\item<2-3> the encoder is $3$ LSTM layers with a dropout based on $300$ dimensional word embeddings for the source language,
+\item<2-3> the decoder is stacked LSTM layers with a dropout and a global attention based on $300$ dimensional word embeddings for the target language.
+\end{itemize}
+
+\onslide<3>{
+\begin{table}
+\begin{tabular}{c c c}
+\toprule
+En-Ru Score & Lv-En Score & En-Ko Score\\
+\midrule
+0.2892 & 0.0576 & 0.2542 \\
+\bottomrule
+\end{tabular}
+\caption{Supervised, 10 epochs, measured in BLEU-4}
+\end{table}
+}
+
+\end{frame}
+
+%------------------------------------------------
+\section{Unsupervised Neural Machine Translation}
+%------------------------------------------------
+
+%------------------------------------------------
+\section{Hands on}
+%------------------------------------------------
+
+%----------------------------------------------------------------------------------------
+
+\end{document}
