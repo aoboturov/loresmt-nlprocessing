@@ -14,6 +14,8 @@
 \usepackage{graphicx} % Allows including images
 \usepackage{booktabs} % Allows the use of \toprule, \midrule and \bottomrule in tables
 
+\graphicspath{ {images/} }
+
 %----------------------------------------------------------------------------------------
 %   TITLE PAGE
 %----------------------------------------------------------------------------------------
@@ -101,9 +103,145 @@ En-Ru Score & Lv-En Score & En-Ko Score\\
 \section{Unsupervised Neural Machine Translation}
 %------------------------------------------------
 
+\begin{frame}
+\frametitle{Semi \& Unsupervised NMT Model with Adversarial Training: the Set-up}
+
+\begin{columns}
+\column{0.47\linewidth}
+\centering
+\begin{figure}
+\includegraphics[width=5cm]{unmt.png}
+\caption{Adversarial training process}
+\end{figure}
+\column{0.47\linewidth}
+\begin{itemize}
+\item implementation of the ``Unsupervised Machine Translation Using Monolingual Corpora Only'' adversarial training
+\item in this case NMT model = encoder + decoder
+\end{itemize}
+\end{columns}
+
+\end{frame}
+
+\begin{frame}
+\frametitle{Semi \& Unsupervised NMT Model with Adversarial Training: the Training Process}
+
+\begin{columns}
+\column{0.47\linewidth}
+\begin{itemize}
+\item train the initial model somehow:
+\begin{itemize}
+\item supervised model - would be semi-supervised learning
+\item unsupervised model - would be fully unsupervised model
+\end{itemize}
+\item iterate over trained models starting from the initial model by minimizing adversarial loss defined as sum of NLLs from denoising autoencoder and translation with noise encoder
+\end{itemize}
+\centering
+\column{0.47\linewidth}
+\begin{figure}
+\includegraphics[width=5cm]{discriminator.png}
+\caption{Discriminator architecture}
+\end{figure}
+\end{columns}
+
+\end{frame}
+
+\begin{frame}
+\frametitle{Semisupervised NMT Model with Adversarial Training: Architecture of Encoder and Decoder}
+
+\begin{columns}
+\column{0.47\linewidth}
+\centering
+\begin{figure}
+\includegraphics[width=5cm]{encoder.png}
+\caption{Encoder architecture}
+\end{figure}
+\column{0.47\linewidth}
+\begin{figure}
+\includegraphics[width=4.5cm]{decoder.png}
+\caption{Decoder architecture}
+\end{figure}
+\end{columns}
+\end{frame}
+
+\begin{frame}
+\frametitle{Semisupervised NMT Model with Adversarial Training: Initial Models}
+
+\begin{itemize}
+\item dictionary translation
+\begin{itemize}
+\item word by word with unknowns
+\item word by word with alignment
+\end{itemize}
+\item fully supervised trained on a 50k parallel corpus
+\end{itemize}
+
+\end{frame}
+
 %------------------------------------------------
 \section{Hands on}
 %------------------------------------------------
+
+\begin{frame}
+\frametitle{Implementations}
+
+\begin{itemize}
+\item our implementation for the hackathon \url{https://github.com/IlyaGusev/UNMT}
+\begin{table}
+\begin{tabular}{l c c c}
+\toprule
+Set-up & En-Ru Score & Lv-En Score & En-Ko Score\\
+\midrule
+Unsupervised UNMT & - & 0.0043 & - \\
+Semi-supervised UNMT & - & - & 0.0018 \\
+\bottomrule
+\end{tabular}
+\caption{UNMT results, measured in BLEU-4}
+\end{table}
+\item<2> the one produced by the OpenNMT team \url{https://github.com/OpenNMT/Hackathon/tree/master/unsupervised-nmt} - yet to be tested
+\end{itemize}
+\end{frame}
+
+\begin{frame}
+\frametitle{How our work could be useful for you?}
+
+\begin{itemize}
+\item Lampe's model is universal in the sense that one could provide data and it should work regardless of the language pair
+\item one could boostrap on any other dataset using our or OpenNMT implementations
+\item baseline model and UNMT are provided as docker images which one could built locally and test if such an approach works for other datasets.
+\end{itemize}
+
+\end{frame}
+
+%------------------------------------------------
+\section{Blind set-up}
+%------------------------------------------------
+
+\begin{frame}
+\frametitle{Blind Set-up Vulnurabilities}
+
+\begin{itemize}
+\item one could identify the language pairs with a side-channel attack
+\item execution time attack
+\item tree search attack
+\end{itemize}
+
+\end{frame}
+
+%------------------------------------------------
+\section{Bibliography}
+%------------------------------------------------
+
+\begin{frame}[allowframebreaks]
+\frametitle<presentation>{Further Reading}
+\begin{thebibliography}{10}
+\beamertemplatebookbibitems
+\setbeamertemplate{bibliography item}[text]
+\bibitem{Lampe2018}
+{Guillaume Lample and Ludovic Denoyer and Marc'Aurelio Ranzato}
+\newblock Unsupervised Machine Translation Using Monolingual Corpora Only.
+\newblock \url{http://arxiv.org/abs/1711.00043}.
+\end{thebibliography}
+\end{frame}
 
 %----------------------------------------------------------------------------------------
 
