@@ -78,7 +78,7 @@
 
 \begin{itemize}
 \item fast to train (20-30 mins on GPU)
-\item available out of the shelf in OpenNMT
+\item available off-the-shelf in OpenNMT
 \item permits to establish a very strait forward baseline
 \item<2-3> the encoder is $3$ LSTM layers with a dropout based on $300$ dimensional word embeddings for the source language,
 \item<2-3> the decoder is stacked LSTM layers with a dropout and a global attention based on $300$ dimensional word embeddings for the target language.
@@ -133,7 +133,7 @@ En-Ru Score & Lv-En Score & En-Ko Score\\
 \item supervised model - would be semi-supervised learning
 \item unsupervised model - would be fully unsupervised model
 \end{itemize}
-\item iterate over trained models starting from the initial model by minimizing adversarial loss defined as sum of NLLs from denoising autoencoder and translation with noise encoder
+\item iterate over trained models starting from the initial model by minimizing adversarial loss, defined as sum of binary cross entropies of discriminator outputs vs expected language, plus NLLs from denoising autoencoder and translation with noise encoder
 \end{itemize}
 \centering
 \column{0.47\linewidth}
@@ -197,7 +197,8 @@ Semi-supervised UNMT & - & - & 0.0018 \\
 \end{tabular}
 \caption{UNMT results, measured in BLEU-4}
 \end{table}
-\item<2> the one produced by the OpenNMT team \url{https://github.com/OpenNMT/Hackathon/tree/master/unsupervised-nmt} - yet to be tested
+\item<2-3> the one produced by the OpenNMT team \url{https://github.com/OpenNMT/Hackathon/tree/master/unsupervised-nmt} - yet to be tested
+\item<3> our project \url{https://github.com/aoboturov/loresmt-nlprocessing}
 \end{itemize}
 \end{frame}
 
